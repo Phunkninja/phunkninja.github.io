@@ -22,13 +22,18 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             overflow-x: hidden;
         }
         
+        /* Minecraft retro styling Slot */
+        .minecraft-font {
+            font-family: 'Press Start 2P', monospace;
+        }
+
         /* Smooth, hardware-accelerated transitions for theme switching & view swapping */
         .theme-transition,
         .theme-transition *,
@@ -74,7 +79,7 @@
 </head>
 <body class="theme-transition bg-slate-100 dark:bg-slate-950 min-h-screen w-screen flex items-center justify-center p-4 sm:p-6 md:p-10 relative selection:bg-blue-500 selection:text-white">
 
-    <!-- Ambient Floating Orbs (Moving slightly with mouse coordinates & transitioning on dark theme) -->
+    <!-- Ambient Floating Orbs -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div id="orb-1" class="absolute w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] rounded-full bg-blue-300/30 dark:bg-blue-900/20 blur-[80px] top-[-10%] left-[-10%] transition-transform duration-1000 ease-out"></div>
         <div id="orb-2" class="absolute w-[45vw] h-[45vw] max-w-[600px] max-h-[600px] rounded-full bg-indigo-300/20 dark:bg-indigo-950/20 blur-[100px] bottom-[-15%] right-[-5%] transition-transform duration-1000 ease-out"></div>
@@ -299,12 +304,12 @@
                                 <path d="M390 182 L402 235" stroke="#2563eb" class="dark:stroke-slate-900" stroke-width="8" stroke-linecap="round"/>
                             </g>
 
-                            <!-- Modern Accent Floaters (Matching Blue/Pink droplets in Light mode, Shurikens in Dark Mode) -->
+                            <!-- Modern Accent Floaters -->
                             <g data-depth="0.5" class="parallax-layer">
                                 <!-- Left Floater -->
                                 <!-- Light Mode: Blue Droplet -->
                                 <path d="M125 245 C125 245, 110 260, 125 275 C140 260, 125 245, 125 245 Z" fill="#2563eb" class="drop-shadow-md dark:hidden"/>
-                                <!-- Dark Mode: Ninja Shuriken / Throwing Star -->
+                                <!-- Dark Mode: Ninja Shuriken -->
                                 <g class="hidden dark:block drop-shadow-[0_4px_6px_rgba(244,63,94,0.3)] animate-[spin_12s_linear_infinite]" transform="translate(125, 260)">
                                     <path d="M 0,-15 L 3,-3 L 15,0 L 3,3 L 0,15 L -3,3 L -15,0 L -3,-3 Z" fill="#94a3b8" />
                                     <path d="M 0,-15 L 0,0 L 15,0 Z" fill="#cbd5e1" />
@@ -315,7 +320,7 @@
                                 <!-- Right Floater -->
                                 <!-- Light Mode: Blue Droplet -->
                                 <path d="M390 290 C390 290, 375 305, 390 320 C405 305, 390 290, 390 290 Z" fill="#2563eb" class="drop-shadow-md dark:hidden"/>
-                                <!-- Dark Mode: Ninja Shuriken / Throwing Star -->
+                                <!-- Dark Mode: Ninja Shuriken -->
                                 <g class="hidden dark:block drop-shadow-[0_4px_6px_rgba(59,130,246,0.3)] animate-[spin_10s_linear_infinite]" transform="translate(390, 305)">
                                     <path d="M 0,-15 L 3,-3 L 15,0 L 3,3 L 0,15 L -3,3 L -15,0 L -3,-3 Z" fill="#94a3b8" />
                                     <path d="M 0,-15 L 0,0 L 15,0 Z" fill="#cbd5e1" />
@@ -446,29 +451,118 @@
                 </div>
             </div>
 
-            <!-- 4. PLAY TAB VIEW -->
+            <!-- 4. PLAY TAB VIEW (9 DRUM PADS + KEYBOARD + SERVERS) -->
             <div id="view-play" class="tab-view hidden-view w-full space-y-6">
                 <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                     <div>
-                        <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400 rounded-full border border-blue-100 dark:border-blue-900/40 inline-block">The Sandbox Playground</span>
-                        <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mt-2">Phunk Audio-Visual Sandbox</h2>
-                        <p class="text-slate-400 text-xs sm:text-sm mt-1">Move your cursor, or click to synthesize sound waves and dynamic liquid particles!</p>
+                        <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 dark:bg-rose-950/40 dark:text-rose-400 rounded-full border border-rose-100 dark:border-rose-900/40 inline-block">Interactive Rhythm Pad</span>
+                        <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mt-2">Phunk Drum Station</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1">Tap the colorful pads below, or press keys <strong class="font-extrabold dark:text-white">1 to 9</strong> on your keyboard (or numpad) to play retro synthesized beats!</p>
                     </div>
                     <!-- Audio Mute/Unmute Switcher -->
-                    <button id="synth-audio-toggle" onclick="toggleAudioSynthesis()" class="flex items-center gap-2 px-4 py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 rounded-xl font-bold text-xs border border-rose-100 dark:border-rose-900/30 transition-all duration-300">
+                    <button id="synth-audio-toggle" onclick="toggleAudioSynthesis()" class="flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 rounded-xl font-bold text-xs border border-emerald-100 dark:border-emerald-900/30 transition-all duration-300">
                         <span id="synth-audio-dot" class="w-2.5 h-2.5 rounded-full bg-rose-600 dark:bg-rose-400 animate-pulse"></span>
                         <span id="synth-audio-text">Audio: Disabled</span>
                     </button>
                 </div>
 
-                <!-- Canvas sandbox -->
-                <div class="relative w-full overflow-hidden rounded-[1.5rem] bg-slate-900 border border-slate-800/80 shadow-2xl h-[280px] sm:h-[320px]">
-                    <canvas id="play-canvas" class="absolute inset-0 w-full h-full cursor-crosshair"></canvas>
-                    
-                    <!-- Floating instructions overlay -->
-                    <div class="absolute bottom-4 left-4 z-10 bg-slate-950/80 backdrop-blur-md px-4 py-2 rounded-xl text-[11px] text-slate-400 pointer-events-none flex items-center gap-2 border border-slate-800">
-                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                        Drag mouse on sandbox grid to stir the particle flow
+                <!-- Drum Sequencer/Machine Pad Grid (Optimized for 9 Pads & Multi-touch / Desktops) -->
+                <div class="grid grid-cols-3 gap-4 p-4 sm:p-6 rounded-[2rem] bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 max-w-xl mx-auto shadow-inner">
+                    <!-- Pad 1 -->
+                    <button id="drum-pad-1" onmousedown="triggerDrum(1)" ontouchstart="event.preventDefault(); triggerDrum(1)" class="drum-pad h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-rose-400 to-red-500 active:scale-95 shadow-md hover:shadow-lg transition-all duration-100 flex flex-col justify-between p-3.5 text-left border border-red-300/20 focus:outline-none focus:ring-4 focus:ring-rose-400/50">
+                        <span class="text-[10px] font-bold text-white/70 uppercase tracking-wider flex justify-between w-full"><span>Pad 01</span><span class="font-mono bg-white/20 px-1 rounded">[1]</span></span>
+                        <span class="text-xs sm:text-sm font-extrabold text-white">FAT KICK</span>
+                    </button>
+                    <!-- Pad 2 -->
+                    <button id="drum-pad-2" onmousedown="triggerDrum(2)" ontouchstart="event.preventDefault(); triggerDrum(2)" class="drum-pad h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 active:scale-95 shadow-md hover:shadow-lg transition-all duration-100 flex flex-col justify-between p-3.5 text-left border border-orange-300/20 focus:outline-none focus:ring-4 focus:ring-orange-400/50">
+                        <span class="text-[10px] font-bold text-white/70 uppercase tracking-wider flex justify-between w-full"><span>Pad 02</span><span class="font-mono bg-white/20 px-1 rounded">[2]</span></span>
+                        <span class="text-xs sm:text-sm font-extrabold text-white">HI-HAT</span>
+                    </button>
+                    <!-- Pad 3 -->
+                    <button id="drum-pad-3" onmousedown="triggerDrum(3)" ontouchstart="event.preventDefault(); triggerDrum(3)" class="drum-pad h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-500 active:scale-95 shadow-md hover:shadow-lg transition-all duration-100 flex flex-col justify-between p-3.5 text-left border border-yellow-300/20 focus:outline-none focus:ring-4 focus:ring-yellow-400/50">
+                        <span class="text-[10px] font-bold text-white/70 uppercase tracking-wider flex justify-between w-full"><span>Pad 03</span><span class="font-mono bg-white/20 px-1 rounded">[3]</span></span>
+                        <span class="text-xs sm:text-sm font-extrabold text-white">LO-FI SNARE</span>
+                    </button>
+                    <!-- Pad 4 -->
+                    <button id="drum-pad-4" onmousedown="triggerDrum(4)" ontouchstart="event.preventDefault(); triggerDrum(4)" class="drum-pad h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 active:scale-95 shadow-md hover:shadow-lg transition-all duration-100 flex flex-col justify-between p-3.5 text-left border border-emerald-300/20 focus:outline-none focus:ring-4 focus:ring-emerald-400/50">
+                        <span class="text-[10px] font-bold text-white/70 uppercase tracking-wider flex justify-between w-full"><span>Pad 04</span><span class="font-mono bg-white/20 px-1 rounded">[4]</span></span>
+                        <span class="text-xs sm:text-sm font-extrabold text-white">HAND CLAP</span>
+                    </button>
+                    <!-- Pad 5 -->
+                    <button id="drum-pad-5" onmousedown="triggerDrum(5)" ontouchstart="event.preventDefault(); triggerDrum(5)" class="drum-pad h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-500 active:scale-95 shadow-md hover:shadow-lg transition-all duration-100 flex flex-col justify-between p-3.5 text-left border border-teal-300/20 focus:outline-none focus:ring-4 focus:ring-teal-400/50">
+                        <span class="text-[10px] font-bold text-white/70 uppercase tracking-wider flex justify-between w-full"><span>Pad 05</span><span class="font-mono bg-white/20 px-1 rounded">[5]</span></span>
+                        <span class="text-xs sm:text-sm font-extrabold text-white">RIM SHOT</span>
+                    </button>
+                    <!-- Pad 6 -->
+                    <button id="drum-pad-6" onmousedown="triggerDrum(6)" ontouchstart="event.preventDefault(); triggerDrum(6)" class="drum-pad h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 active:scale-95 shadow-md hover:shadow-lg transition-all duration-100 flex flex-col justify-between p-3.5 text-left border border-cyan-300/20 focus:outline-none focus:ring-4 focus:ring-cyan-400/50">
+                        <span class="text-[10px] font-bold text-white/70 uppercase tracking-wider flex justify-between w-full"><span>Pad 06</span><span class="font-mono bg-white/20 px-1 rounded">[6]</span></span>
+                        <span class="text-xs sm:text-sm font-extrabold text-white">COWBELL</span>
+                    </button>
+                    <!-- Pad 7 -->
+                    <button id="drum-pad-7" onmousedown="triggerDrum(7)" ontouchstart="event.preventDefault(); triggerDrum(7)" class="drum-pad h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-500 active:scale-95 shadow-md hover:shadow-lg transition-all duration-100 flex flex-col justify-between p-3.5 text-left border border-blue-300/20 focus:outline-none focus:ring-4 focus:ring-blue-400/50">
+                        <span class="text-[10px] font-bold text-white/70 uppercase tracking-wider flex justify-between w-full"><span>Pad 07</span><span class="font-mono bg-white/20 px-1 rounded">[7]</span></span>
+                        <span class="text-xs sm:text-sm font-extrabold text-white">LOW TOM</span>
+                    </button>
+                    <!-- Pad 8 -->
+                    <button id="drum-pad-8" onmousedown="triggerDrum(8)" ontouchstart="event.preventDefault(); triggerDrum(8)" class="drum-pad h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-indigo-400 to-violet-500 active:scale-95 shadow-md hover:shadow-lg transition-all duration-100 flex flex-col justify-between p-3.5 text-left border border-indigo-300/20 focus:outline-none focus:ring-4 focus:ring-indigo-400/50">
+                        <span class="text-[10px] font-bold text-white/70 uppercase tracking-wider flex justify-between w-full"><span>Pad 08</span><span class="font-mono bg-white/20 px-1 rounded">[8]</span></span>
+                        <span class="text-xs sm:text-sm font-extrabold text-white">HIGH TOM</span>
+                    </button>
+                    <!-- Pad 9 -->
+                    <button id="drum-pad-9" onmousedown="triggerDrum(9)" ontouchstart="event.preventDefault(); triggerDrum(9)" class="drum-pad h-24 sm:h-28 rounded-2xl bg-gradient-to-br from-violet-400 to-fuchsia-500 active:scale-95 shadow-md hover:shadow-lg transition-all duration-100 flex flex-col justify-between p-3.5 text-left border border-violet-300/20 focus:outline-none focus:ring-4 focus:ring-violet-400/50">
+                        <span class="text-[10px] font-bold text-white/70 uppercase tracking-wider flex justify-between w-full"><span>Pad 09</span><span class="font-mono bg-white/20 px-1 rounded">[9]</span></span>
+                        <span class="text-xs sm:text-sm font-extrabold text-white">SYNTH LOW</span>
+                    </button>
+                </div>
+
+                <!-- SERVERS SECTION -->
+                <div class="max-w-3xl mx-auto pt-8 border-t border-slate-200/50 dark:border-slate-800/80 space-y-4">
+                    <h3 class="text-xl font-extrabold text-slate-800 dark:text-white flex items-center gap-2">
+                        <!-- Server Icon -->
+                        <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a3.75 3.75 0 01.75-2.25L5.25 4.5h13.5l1.5 4.5a3.75 3.75 0 01.75 2.25M6.75 12h.008v.008H6.75V12zm0 6h.008v.008H6.75V18zm3.75-6h.008v.008h-.008V12zm0 6h.008v.008h-.008V18z"></path>
+                        </svg>
+                        Servers
+                    </h3>
+
+                    <!-- Server Entry Card -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 shadow-md hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center gap-4">
+                            <!-- Custom Grass block SVG representation for Minecraft -->
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0 border border-slate-200/30 dark:border-slate-700/30">
+                                <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Grass layer -->
+                                    <rect x="0" y="0" width="32" height="12" fill="#16a34a"/>
+                                    <!-- Dirt layer -->
+                                    <rect x="0" y="12" width="32" height="20" fill="#78350f"/>
+                                    <!-- Pixel details -->
+                                    <rect x="4" y="4" width="4" height="4" fill="#15803d"/>
+                                    <rect x="20" y="2" width="4" height="4" fill="#15803d"/>
+                                    <rect x="12" y="16" width="4" height="4" fill="#451a03"/>
+                                    <rect x="24" y="20" width="4" height="4" fill="#451a03"/>
+                                </svg>
+                            </div>
+                            
+                            <!-- Server Information with unique Minecraft font -->
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="minecraft-font text-xs sm:text-sm tracking-wider text-slate-800 dark:text-emerald-400">MINECRAFT</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/30">Vanilla 1.20</span>
+                                </div>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                                    mc.thephunkcollective.com &bull; <strong class="text-slate-500 dark:text-slate-400 font-bold">12/100 online</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Connect / Copy action button -->
+                        <button onclick="copyServerIP('mc.thephunkcollective.com')" class="w-full sm:w-auto px-5 py-2.5 bg-slate-800 dark:bg-rose-600 hover:bg-slate-900 dark:hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition-all-custom flex items-center justify-center gap-2 shrink-0 transform hover:-translate-y-0.5">
+                            <span>Connect</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M19.5 3.593c.169.022.338.05.507.085m-14.808.085a22.96 22.96 0 0114.808 0M19.5 17.25c0-3.176-1.558-5.99-3.953-7.75"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -546,7 +640,7 @@
             </button>
         </div>
 
-        <!-- Drawer Content Area (Dynamically Rendered based on interaction) -->
+        <!-- Drawer Content Area -->
         <div class="p-6 flex-1 overflow-y-auto space-y-6" id="drawer-content">
             <!-- Dynamic components inserted here -->
         </div>
@@ -651,9 +745,7 @@
 
             // Specific initialization triggers per view
             if (tabId === 'play') {
-                initPlayCanvas();
-            } else {
-                stopPlayCanvas();
+                initDrumMachine();
             }
 
             // Update footer status message
@@ -669,7 +761,7 @@
                 statusText.textContent = "Browsing Creative Productions";
                 pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse";
             } else if (tabId === 'play') {
-                statusText.textContent = "Audiovisual Physics Playground Active";
+                statusText.textContent = "Drum Pad Station Active";
                 pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse";
             }
 
@@ -729,18 +821,27 @@
             modal.classList.remove('flex');
         }
 
-        /* --- THE PHUNKY SANDBOX INTERACTIVE GRAPHICS & AUDIO AUDIO-SYNTH --- */
-        let canvas = document.getElementById('play-canvas');
-        let ctx = canvas.getContext('2d');
-        let animationFrameId = null;
-        let particles = [];
-        let mouseX = 0;
-        let mouseY = 0;
-        let isStirring = false;
-        
-        // Web Audio Synthesizer Config
+        /* --- Secure Text-to-Clipboard Server Connector --- */
+        function copyServerIP(ip) {
+            const el = document.createElement('textarea');
+            el.value = ip;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast("Minecraft Server IP copied! Add to your game server list.");
+        }
+
+        /* --- THE PHUNK DRUM MACHINE SYNTHESIS LOGIC (Web Audio API) --- */
         let audioCtx = null;
         let synthesisEnabled = false;
+        let noiseBuffer = null;
+
+        function initDrumMachine() {
+            if (!synthesisEnabled) {
+                showToast("Click the 'Audio: Disabled' button or press any pad to start!");
+            }
+        }
 
         function toggleAudioSynthesis() {
             synthesisEnabled = !synthesisEnabled;
@@ -749,173 +850,304 @@
             const btn = document.getElementById('synth-audio-toggle');
             
             if (synthesisEnabled) {
-                // Initialize context on user event
+                // Initialize audio context
                 if (!audioCtx) {
                     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    buildNoiseBuffer();
                 }
                 btnDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
-                btnTxt.textContent = "Audio: Enabled";
+                btnTxt.textContent = "Audio: Active";
                 btn.className = "flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 rounded-xl font-bold text-xs border border-emerald-100 dark:border-emerald-900/30 transition-all duration-300";
-                showToast("Audio synthesizer enabled! Move cursor over sandbox.");
+                showToast("Phunk Synthesizer enabled! Start tapping pads.");
             } else {
-                btnDot.className = "w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse";
+                btnDot.className = "w-2.5 h-2.5 rounded-full bg-rose-600 dark:bg-rose-400 animate-pulse";
                 btnTxt.textContent = "Audio: Disabled";
                 btn.className = "flex items-center gap-2 px-4 py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 rounded-xl font-bold text-xs border border-rose-100 dark:border-rose-900/30 transition-all duration-300";
-                showToast("Audio synthesizer muted.");
+                showToast("Synthesizer muted.");
             }
         }
 
-        function playSynthTone(frequency) {
-            if (!synthesisEnabled || !audioCtx) return;
-            try {
-                let osc = audioCtx.createOscillator();
-                let gain = audioCtx.createGain();
-                
-                osc.type = 'triangle'; // Smooth mellow vintage synth tone
-                osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-                
-                // Extremely rapid gain decay to make it responsive / bubbly
-                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
-            } catch (e) {
-                // Fail-safe silently if audio context is blocked
+        // Shared noise buffer for snares, hats, and claps
+        function buildNoiseBuffer() {
+            const bufferSize = audioCtx.sampleRate * 2;
+            noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
             }
         }
 
-        class Particle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.radius = Math.random() * 4 + 2;
-                this.color = `hsl(${Math.random() * 60 + 200}, 85%, 60%)`; // Premium phunky blues & purples
-                if (Math.random() > 0.6) {
-                    this.color = `hsl(${Math.random() * 30 + 330}, 95%, 65%)`; // Pink neon pops
-                }
-                this.vx = (Math.random() - 0.5) * 4;
-                this.vy = (Math.random() - 0.5) * 4;
-                this.life = 100; // Lifespan in frames
+        // Trigger Synth Sound by Pad ID
+        function triggerDrum(padNum) {
+            if (!synthesisEnabled) {
+                toggleAudioSynthesis();
+            }
+            if (!audioCtx) return;
+
+            // Ensure AudioContext is running
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
             }
 
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.life / 100;
-                ctx.fill();
-            }
+            const now = audioCtx.currentTime;
 
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.vx *= 0.98; // Friction deceleration
-                this.vy *= 0.98;
-                this.life -= 1.5;
+            switch(padNum) {
+                case 1: // FAT KICK
+                    playKick(now);
+                    break;
+                case 2: // HI-HAT
+                    playHat(now);
+                    break;
+                case 3: // LO-FI SNARE
+                    playSnare(now);
+                    break;
+                case 4: // HAND CLAP
+                    playClap(now);
+                    break;
+                case 5: // RIM SHOT
+                    playRim(now);
+                    break;
+                case 6: // COWBELL
+                    playCowbell(now);
+                    break;
+                case 7: // LOW TOM
+                    playTom(now, 100, 50);
+                    break;
+                case 8: // HIGH TOM
+                    playTom(now, 200, 100);
+                    break;
+                case 9: // SYNTH LOW
+                    playSynthTone(now, 130.81, 'triangle'); // C3
+                    break;
             }
         }
 
-        function initPlayCanvas() {
-            // Match canvas coordinates to device boundaries on load & resize
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
+        // Keyboard Controls mapping [1] through [9]
+        window.addEventListener('keydown', (e) => {
+            // Prevent playing on inputs
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            // Normalize key down events for main numbers and numpad
+            let padNum = null;
+            if (e.key >= '1' && e.key <= '9') {
+                padNum = parseInt(e.key);
+            }
             
-            canvas.addEventListener('mousemove', onCanvasMove);
-            canvas.addEventListener('touchmove', onCanvasTouch, { passive: true });
-            canvas.addEventListener('mousedown', () => { isStirring = true; });
-            canvas.addEventListener('mouseup', () => { isStirring = false; });
-
-            // Initialize random floating particles to populate the board
-            particles = [];
-            for (let i = 0; i < 40; i++) {
-                particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
-            }
-
-            // Fire loop
-            animatePlay();
-        }
-
-        function stopPlayCanvas() {
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            }
-            window.removeEventListener('resize', resizeCanvas);
-        }
-
-        function resizeCanvas() {
-            if (!canvas) return;
-            const rect = canvas.parentNode.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
-        }
-
-        function onCanvasMove(e) {
-            const rect = canvas.getBoundingClientRect();
-            mouseX = e.clientX - rect.left;
-            mouseY = e.clientY - rect.top;
-            spawnInteractParticles();
-        }
-
-        function onCanvasTouch(e) {
-            if (e.touches.length > 0) {
-                const rect = canvas.getBoundingClientRect();
-                mouseX = e.touches[0].clientX - rect.left;
-                mouseY = e.touches[0].top - rect.top;
-                spawnInteractParticles();
-            }
-        }
-
-        // Spawn interactive fluid particles inside play sandbox
-        function spawnInteractParticles() {
-            for (let i = 0; i < 2; i++) {
-                let p = new Particle(mouseX, mouseY);
-                p.vx += (Math.random() - 0.5) * 6;
-                p.vy += (Math.random() - 0.5) * 6;
-                particles.push(p);
-            }
-
-            if (Math.random() > 0.85) {
-                const ratio = 1 - (mouseY / canvas.height);
-                const pitch = 220 + (ratio * 440);
-                playSynthTone(pitch);
-            }
-        }
-
-        function animatePlay() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            ctx.strokeStyle = 'rgba(99, 102, 241, 0.04)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
-                    if (dist < 80) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
+            if (padNum && padNum >= 1 && padNum <= 9) {
+                // Play drum
+                triggerDrum(padNum);
+                
+                // Visual click/press feedback
+                const padEl = document.getElementById(`drum-pad-${padNum}`);
+                if (padEl) {
+                    padEl.classList.add('scale-95', 'brightness-110', 'ring-4');
                 }
             }
+        });
 
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                particles[i].draw();
-                if (particles[i].life <= 0) {
-                    particles.splice(i, 1);
+        window.addEventListener('keyup', (e) => {
+            let padNum = null;
+            if (e.key >= '1' && e.key <= '9') {
+                padNum = parseInt(e.key);
+            }
+            
+            if (padNum && padNum >= 1 && padNum <= 9) {
+                // Remove visual click/press feedback
+                const padEl = document.getElementById(`drum-pad-${padNum}`);
+                if (padEl) {
+                    padEl.classList.remove('scale-95', 'brightness-110', 'ring-4');
                 }
             }
+        });
 
-            if (particles.length < 35) {
-                particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
-            }
+        // Kick Synth (Pitch frequency sweep + volume envelope)
+        function playKick(time) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
 
-            animationFrameId = requestAnimationFrame(animatePlay);
+            osc.frequency.setValueAtTime(150, time);
+            osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.35);
+
+            gain.gain.setValueAtTime(1.0, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.35);
+
+            osc.start(time);
+            osc.stop(time + 0.35);
         }
+
+        // Hi-Hat Synth (Filtered noise + ultra-fast decay envelope)
+        function playHat(time) {
+            const source = audioCtx.createBufferSource();
+            source.buffer = noiseBuffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.setValueAtTime(7500, time);
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.3, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+
+            source.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            source.start(time);
+            source.stop(time + 0.08);
+        }
+
+        // Snare Drum Synth (Combines tone sweep + noise snap)
+        function playSnare(time) {
+            // Snap component
+            const osc = audioCtx.createOscillator();
+            const oscGain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(180, time);
+            osc.frequency.exponentialRampToValueAtTime(100, time + 0.1);
+            oscGain.gain.setValueAtTime(0.7, time);
+            oscGain.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+            osc.connect(oscGain);
+            oscGain.connect(audioCtx.destination);
+
+            // Noise rattle component
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = noiseBuffer;
+            const noiseFilter = audioCtx.createBiquadFilter();
+            noiseFilter.type = 'bandpass';
+            noiseFilter.frequency.value = 1000;
+            const noiseGain = audioCtx.createGain();
+            noiseGain.gain.setValueAtTime(0.5, time);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.1);
+            noise.start(time);
+            noise.stop(time + 0.25);
+        }
+
+        // Hand Clap Synth (Rapid multi-triggered noise burst)
+        function playClap(time) {
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = noiseBuffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 1200;
+
+            const gain = audioCtx.createGain();
+            // Three micro bursts
+            gain.gain.setValueAtTime(0.6, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.015);
+            gain.gain.setValueAtTime(0.6, time + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.035);
+            // Long fade out
+            gain.gain.setValueAtTime(0.6, time + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.28);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            noise.start(time);
+            noise.stop(time + 0.28);
+        }
+
+        // Rim Shot Synth (Short, sharp high-pitch wooden snap)
+        function playRim(time) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1400, time);
+            osc.frequency.exponentialRampToValueAtTime(300, time + 0.05);
+
+            gain.gain.setValueAtTime(0.8, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.05);
+        }
+
+        // Cowbell Synth (Tuned metallic dual oscillator square waves)
+        function playCowbell(time) {
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            osc1.type = 'square';
+            osc2.type = 'square';
+            osc1.frequency.value = 560; // Classical 808 tuning frequencies
+            osc2.frequency.value = 845;
+
+            filter.type = 'bandpass';
+            filter.frequency.value = 1000;
+
+            gain.gain.setValueAtTime(0.5, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+
+            osc1.connect(filter);
+            osc2.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc1.start(time);
+            osc2.start(time);
+            osc1.stop(time + 0.25);
+            osc2.stop(time + 0.25);
+        }
+
+        // Tom Synth (Medium-pitch resonant percussion sweep)
+        function playTom(time, startFreq, endFreq) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(startFreq, time);
+            osc.frequency.exponentialRampToValueAtTime(endFreq, time + 0.25);
+
+            gain.gain.setValueAtTime(0.8, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.25);
+        }
+
+        // Melodic/Harmonic Synth Pluck
+        function playSynthTone(time, freq, type) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            osc.type = type;
+            osc.frequency.value = freq;
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(2000, time);
+            filter.frequency.exponentialRampToValueAtTime(200, time + 0.4);
+
+            gain.gain.setValueAtTime(0.4, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.5);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.5);
+        }
+
+        /* --- THEME, PARALLAX, GLOW, MOUSE TRACKING --- */
 
         // Smoothly follow Mouse Movement across the entire Screen
         window.addEventListener('mousemove', (e) => {
