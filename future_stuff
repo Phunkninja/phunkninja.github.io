@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Phunk Collective - Be Awesome</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configure Tailwind to support class-based dark mode
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    boxShadow: {
+                        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Press+Start+2P&family=Stalinist+One&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- Custom Game Fonts --- */
+        
+        /* Minecraft retro styling */
+        .minecraft-font {
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        /* ARK Survival Evolved Sculpted Roman Serif */
+        .ark-font {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            letter-spacing: 0.18em;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Rust Rugged Industrial Font Integration */
+        @font-face {
+            font-family: 'RustFont';
+            src: url('https://db.onlinewebfonts.com/t/20fcfdbf92ecdf6b797cd924ef976378.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        .rust-font {
+            font-family: 'RustFont', 'Stalinist One', 'Impact', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        /* Smooth, hardware-accelerated transitions for theme switching & view swapping */
+        .theme-transition,
+        .theme-transition *,
+        .theme-transition *:before,
+        .theme-transition *:after {
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        fill 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        stroke 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Custom smooth transition for interactive hover elements */
+        .transition-all-custom {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Gradient tracking glow behind the card (adapts to light/dark mode) */
+        #interactive-glow {
+            background: radial-gradient(circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--glow-color, rgba(99, 102, 241, 0.15)), transparent 80%);
+            pointer-events: none;
+        }
+
+        /* Slide-up fade transition for tab views */
+        .tab-view {
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .tab-view.hidden-view {
+            opacity: 0;
+            transform: translateY(15px);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+        }
+        .tab-view.active-view {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="theme-transition bg-slate-100 dark:bg-slate-950 min-h-screen w-screen flex items-center justify-center p-4 sm:p-6 md:p-10 relative selection:bg-blue-500 selection:text-white">
+
+    <!-- Ambient Floating Orbs -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div id="orb-1" class="absolute w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] rounded-full bg-blue-300/30 dark:bg-blue-900/20 blur-[80px] top-[-10%] left-[-10%] transition-transform duration-1000 ease-out"></div>
+        <div id="orb-2" class="absolute w-[45vw] h-[45vw] max-w-[600px] max-h-[600px] rounded-full bg-indigo-300/20 dark:bg-indigo-950/20 blur-[100px] bottom-[-15%] right-[-5%] transition-transform duration-1000 ease-out"></div>
+        <div id="orb-3" class="absolute w-[30vw] h-[30vw] max-w-[350px] max-h-[350px] rounded-full bg-pink-200/20 dark:bg-rose-950/10 blur-[70px] top-[30%] right-[20%] transition-transform duration-1000 ease-out"></div>
+    </div>
+
+    <!-- Mouse Interactive Radial Glow Overlay -->
+    <div id="interactive-glow" class="absolute inset-0 z-10"></div>
+
+    <!-- Main Card Container -->
+    <main id="main-card" class="relative z-20 w-full max-w-6xl bg-white/90 dark:bg-slate-900/80 backdrop-blur-md rounded-[2.5rem] shadow-2xl shadow-indigo-950/5 dark:shadow-black/50 border border-white/50 dark:border-slate-800/40 p-6 sm:p-10 md:p-16 flex flex-col justify-between min-h-[550px] md:min-h-[620px] transition-all-custom transform hover:shadow-3xl hover:shadow-indigo-950/10 dark:hover:shadow-black/70">
+        
+        <!-- Header -->
+        <header class="flex items-center justify-between w-full mb-10 md:mb-6">
+            <!-- Logo -->
+            <a href="#" onclick="switchTab('home')" class="group flex items-center gap-1.5 focus:outline-none">
+                <span class="text-2xl font-extrabold text-slate-800 dark:text-white tracking-tight transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-rose-400">
+                    Phunk<span class="text-blue-600 dark:text-rose-500 transition-all duration-300 group-hover:pl-0.5">.</span>
+                </span>
+            </a>
+
+            <!-- Right-hand Header Actions: Nav + Mode Switcher -->
+            <div class="flex items-center gap-4 sm:gap-6 md:gap-8">
+                <!-- Navigation Links -->
+                <nav class="flex items-center gap-4 sm:gap-6 md:gap-8">
+                    <button id="nav-home" onclick="switchTab('home')" class="nav-link relative text-[15px] font-medium text-blue-600 dark:text-blue-400 py-1 focus:outline-none">
+                        Home
+                        <span class="nav-line absolute bottom-0 left-0 w-full h-[2px] bg-blue-600 dark:bg-blue-400 scale-x-100 transition-transform origin-left duration-300 rounded-full"></span>
+                    </button>
+                    <button id="nav-about" onclick="switchTab('about')" class="nav-link relative text-[15px] font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 py-1 focus:outline-none">
+                        About
+                        <span class="nav-line absolute bottom-0 left-0 w-full h-[2px] bg-blue-600 dark:bg-blue-400 scale-x-0 transition-transform origin-left duration-300 rounded-full"></span>
+                    </button>
+                    <button id="nav-work" onclick="switchTab('work')" class="nav-link relative text-[15px] font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 py-1 focus:outline-none">
+                        Work
+                        <span class="nav-line absolute bottom-0 left-0 w-full h-[2px] bg-blue-600 dark:bg-blue-400 scale-x-0 transition-transform origin-left duration-300 rounded-full"></span>
+                    </button>
+                    <button id="nav-play" onclick="switchTab('play')" class="nav-link relative text-[15px] font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 py-1 focus:outline-none">
+                        Play
+                        <span class="nav-line absolute bottom-0 left-0 w-full h-[2px] bg-blue-600 dark:bg-blue-400 scale-x-0 transition-transform origin-left duration-300 rounded-full"></span>
+                    </button>
+                </nav>
+
+                <!-- Premium Dark Theme Switch Button -->
+                <button id="theme-toggle-btn" onclick="toggleTheme()" class="relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-800 dark:hover:text-white transition-all duration-300 focus:outline-none" aria-label="Toggle Theme">
+                    <!-- Sun Icon (visible in Dark mode) -->
+                    <svg id="theme-icon-sun" class="w-[18px] h-[18px] hidden dark:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
+                    </svg>
+                    <!-- Moon Icon (visible in Light mode) -->
+                    <svg id="theme-icon-moon" class="w-[18px] h-[18px] block dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Viewport Container with Dynamic View Switches -->
+        <div class="relative flex-1 flex flex-col justify-center my-auto min-h-[360px]">
+            
+            <!-- 1. HOME TAB VIEW -->
+            <div id="view-home" class="tab-view active-view grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center w-full">
+                <!-- Left Headline & CTA Column -->
+                <div class="lg:col-span-6 flex flex-col justify-center text-left space-y-6 md:space-y-8">
+                    <div class="space-y-4">
+                        <h1 class="text-4xl sm:text-5xl md:text-[54px] font-extrabold text-slate-800 dark:text-white leading-[1.15] tracking-tight">
+                            Welcome to <span class="text-blue-600 dark:text-rose-500 relative inline-block">The Phunk Collective.<span class="absolute bottom-1 left-0 w-full h-[6px] bg-blue-100 dark:bg-rose-950/40 -z-10 rounded"></span></span>
+                            <br class="hidden sm:inline">
+                            Be awesome.
+                        </h1>
+                        <p class="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-normal leading-relaxed max-w-md">
+                            Creating awesome stuff for totally rad people, using a mix of code, vibes and a <strong class="font-extrabold text-slate-800 dark:text-white">caffeine.</strong>
+                        </p>
+                    </div>
+
+                    <!-- CTA Action Buttons -->
+                    <div class="flex flex-wrap items-center gap-4">
+                        <button onclick="switchTab('work')" class="group px-6 py-3.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-500 dark:hover:bg-blue-600 dark:active:bg-blue-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 transition-all-custom duration-300 flex items-center gap-2 transform hover:-translate-y-0.5">
+                            <span>View Creative Showcase</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                            </svg>
+                        </button>
+                        <button onclick="togglePreviewDrawer('docs')" class="px-6 py-3.5 bg-blue-50/80 dark:bg-slate-800/80 hover:bg-blue-100/90 dark:hover:bg-slate-700/90 active:bg-blue-200 dark:active:bg-slate-600 text-blue-600 dark:text-blue-400 font-semibold rounded-2xl transition-all-custom duration-300 border border-blue-100/50 dark:border-slate-700/50 hover:border-blue-200/60 dark:hover:border-slate-600 transform hover:-translate-y-0.5">
+                            Documentation
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Visual Illustration Column (Reacting to mouse moves) -->
+                <div class="lg:col-span-6 flex items-center justify-center relative min-h-[280px] sm:min-h-[350px]">
+                    <div id="illustration-container" class="relative w-full max-w-[480px] h-[320px] sm:h-[360px] flex items-center justify-center transition-transform duration-300 ease-out select-none">
+                        <!-- Ambient SVG Layers -->
+                        <div data-depth="0.1" class="parallax-layer absolute w-60 h-60 rounded-full bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 shadow-inner flex items-center justify-center -translate-x-20 -translate-y-8">
+                            <div class="w-44 h-44 rounded-full bg-pink-500/10 dark:bg-pink-500/5 mix-blend-multiply dark:mix-blend-normal filter blur-md"></div>
+                        </div>
+                        <div data-depth="0.15" class="parallax-layer absolute w-56 h-56 rounded-full bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 shadow-inner translate-x-20 translate-y-12">
+                            <div class="w-40 h-40 rounded-full bg-blue-500/10 dark:bg-blue-500/5 mix-blend-multiply dark:mix-blend-normal filter blur-md"></div>
+                        </div>
+                        <div data-depth="0.25" class="parallax-layer absolute w-16 h-16 rounded-full bg-rose-400 dark:bg-rose-500/90 -translate-x-32 -translate-y-20 shadow-md"></div>
+
+                        <!-- Main Custom SVG Illustration -->
+                        <svg id="custom-illustration" class="w-full h-full relative z-10" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- SVG Interface elements -->
+                            <g data-depth="0.3" class="parallax-layer">
+                                <rect x="60" y="190" width="130" height="90" rx="8" fill="#2d3748" class="shadow-lg" />
+                                <rect x="70" y="202" width="110" height="6" rx="3" fill="#4a5568" />
+                                <circle cx="75" cy="222" r="5" fill="#3182ce" />
+                                <rect x="88" y="219" width="80" height="6" rx="3" fill="#4a5568" />
+                                <circle cx="75" cy="238" r="5" fill="#3182ce" />
+                                <rect x="88" y="235" width="60" height="6" rx="3" fill="#4a5568" />
+                                <circle cx="75" cy="254" r="5" fill="#3182ce" />
+                                <rect x="88" y="251" width="90" height="6" rx="3" fill="#4a5568" />
+                                <ellipse cx="125" cy="290" rx="35" ry="5" fill="#e2e8f0" class="dark:fill-slate-800" />
+                            </g>
+
+                            <!-- Left Figure (Woman developer in Light mode, Ninja in Dark Mode) -->
+                            <g data-depth="0.4" class="parallax-layer">
+                                <!-- Shadow -->
+                                <ellipse cx="190" cy="305" rx="30" ry="6" fill="#cbd5e1" class="dark:fill-slate-950" opacity="0.6"/>
+                                <!-- Legs -->
+                                <path d="M185 240 L188 305" stroke="#1e293b" class="dark:stroke-slate-950" stroke-width="6" stroke-linecap="round"/>
+                                <path d="M195 240 L198 305" stroke="#1e293b" class="dark:stroke-slate-950" stroke-width="6" stroke-linecap="round"/>
+                                <!-- Leg strapping details for Ninja mode only -->
+                                <path d="M185 270 L191 270" stroke="#ffffff" stroke-width="1.5" class="hidden dark:block opacity-45" />
+                                <path d="M186 280 L192 280" stroke="#ffffff" stroke-width="1.5" class="hidden dark:block opacity-45" />
+                                <path d="M195 270 L201 270" stroke="#ffffff" stroke-width="1.5" class="hidden dark:block opacity-45" />
+                                <path d="M196 280 L202 280" stroke="#ffffff" stroke-width="1.5" class="hidden dark:block opacity-45" />
+
+                                <!-- Pants -->
+                                <path d="M180 190 L200 190 L205 245 L182 245 Z" fill="#1e293b" class="dark:fill-slate-950" />
+                                <!-- Torso / Shirt -->
+                                <path d="M172 135 L208 135 L202 190 L178 190 Z" fill="#4f46e5" class="dark:fill-slate-900" />
+                                <!-- Red Sash (Dark Mode Ninja exclusive) -->
+                                <path d="M178 180 L202 180" stroke="#ef4444" stroke-width="5" class="hidden dark:block" />
+                                <path d="M202 180 L208 195" stroke="#ef4444" stroke-width="3" stroke-linecap="round" class="hidden dark:block" />
+
+                                <!-- Neck -->
+                                <rect x="187" y="125" width="6" height="12" fill="#8d5b4c" class="dark:fill-slate-900" />
+                                <!-- Head & Face Base -->
+                                <circle cx="190" cy="115" r="14" fill="#8d5b4c" class="dark:fill-slate-900" />
+                                <!-- Eye Slit (Dark Mode exclusive) -->
+                                <rect x="182" y="108" width="16" height="6" fill="#8d5b4c" class="hidden dark:block" />
+                                <!-- Ninja Eyes (Dark Mode exclusive) -->
+                                <circle cx="186" cy="111" r="1" fill="#111827" class="hidden dark:block" />
+                                <circle cx="194" cy="111" r="1" fill="#111827" class="hidden dark:block" />
+
+                                <!-- Hair / Stealth Cowl -->
+                                <circle cx="192" cy="95" r="8" fill="#1e293b" class="dark:fill-slate-950" />
+                                <path d="M176 110 C176 95, 204 95, 204 110 Z" fill="#1e293b" class="dark:fill-slate-950" />
+                                
+                                <!-- Ninja Headband Red (Dark Mode exclusive) -->
+                                <path d="M178 106 L202 106" stroke="#ef4444" stroke-width="3.5" class="hidden dark:block" />
+                                <path d="M176 106 Q168 102 165 108" stroke="#ef4444" stroke-width="2.5" fill="none" class="hidden dark:block" />
+                                <path d="M176 106 Q170 114 167 116" stroke="#ef4444" stroke-width="2" fill="none" class="hidden dark:block" />
+
+                                <!-- Arms -->
+                                <path d="M174 135 L145 190" stroke="#4f46e5" class="dark:stroke-slate-900" stroke-width="10" stroke-linecap="round"/>
+                                <path d="M145 190 L140 193" stroke="#8d5b4c" class="dark:stroke-slate-900" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M205 135 L212 185" stroke="#4f46e5" class="dark:stroke-slate-900" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M212 185 L213 192" stroke="#8d5b4c" class="dark:stroke-slate-900" stroke-width="7" stroke-linecap="round"/>
+                            </g>
+
+                            <!-- Right Scene Card (Tech Board) -->
+                            <g data-depth="0.35" class="parallax-layer">
+                                <rect x="290" y="220" width="110" height="75" rx="8" fill="#1e293b" class="shadow-lg dark:fill-slate-800" />
+                                <circle cx="325" cy="258" r="18" fill="#2563eb" />
+                                <path d="M325 240 A 18 18 0 0 1 343 258 L 325 258 Z" fill="#60a5fa" />
+                                <rect x="355" y="235" width="35" height="6" rx="3" fill="#475569" class="dark:fill-slate-600" />
+                                <rect x="355" y="247" width="25" height="6" rx="3" fill="#475569" class="dark:fill-slate-600" />
+                                <rect x="355" y="259" width="30" height="6" rx="3" fill="#475569" class="dark:fill-slate-600" />
+                                <rect x="355" y="271" width="15" height="6" rx="3" fill="#475569" class="dark:fill-slate-600" />
+                            </g>
+
+                            <!-- Right Figure (Man developer in Light mode, Ninja with Katana in Dark Mode) -->
+                            <g data-depth="0.45" class="parallax-layer">
+                                <!-- Shadow -->
+                                <ellipse cx="360" cy="318" rx="25" ry="5" fill="#cbd5e1" class="dark:fill-slate-950" opacity="0.6" />
+                                
+                                <!-- Ninja Katana on Back (Dark Mode exclusive) -->
+                                <!-- Sheath -->
+                                <path d="M352 215 L325 155" stroke="#0f172a" stroke-width="6" stroke-linecap="round" class="hidden dark:block" />
+                                <!-- Hilt -->
+                                <path d="M325 155 L315 133" stroke="#ef4444" stroke-width="6" stroke-linecap="round" class="hidden dark:block" />
+                                <!-- Guard -->
+                                <path d="M320 158 L330 152" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round" class="hidden dark:block" />
+
+                                <!-- Leg hanging down -->
+                                <path d="M380 260 L395 315" stroke="#f43f5e" class="dark:stroke-slate-950" stroke-width="7" stroke-linecap="round"/>
+                                <!-- Leg crossed/resting -->
+                                <path d="M384 255 L405 275 L415 295" stroke="#f43f5e" class="dark:stroke-slate-950" stroke-width="7" stroke-linecap="round"/>
+                                
+                                <!-- Skin shoes/ankles -->
+                                <path d="M395 315 L402 318" stroke="#cca080" class="dark:stroke-slate-950" stroke-width="6" stroke-linecap="round"/>
+                                
+                                <!-- Torso / Shirt -->
+                                <path d="M365 185 L392 180 L385 240 L362 240 Z" fill="#2563eb" class="dark:fill-slate-900" />
+                                <!-- Red Ninja Belt/Sash (Dark Mode exclusive) -->
+                                <path d="M363 234 L386 230" stroke="#ef4444" stroke-width="5" class="hidden dark:block" />
+
+                                <!-- Neck -->
+                                <rect x="373" y="174" width="6" height="10" fill="#cca080" class="dark:fill-slate-900" />
+                                
+                                <!-- Head & Face Base -->
+                                <circle cx="376" cy="160" r="13" fill="#cca080" class="dark:fill-slate-900" />
+                                <!-- Eye Slit (Dark Mode exclusive) -->
+                                <rect x="368" y="153" width="16" height="6" fill="#cca080" class="hidden dark:block" />
+                                <!-- Ninja Eyes (Dark Mode exclusive) -->
+                                <circle cx="372" cy="156" r="1" fill="#111827" class="hidden dark:block" />
+                                <circle cx="380" cy="156" r="1" fill="#111827" class="hidden dark:block" />
+
+                                <!-- Hair / Stealth Cowl -->
+                                <path d="M367 155 C367 145, 388 145, 388 155 Z" fill="#1e293b" class="dark:fill-slate-950" />
+                                
+                                <!-- Ninja Headband Red (Dark Mode exclusive) -->
+                                <path d="M367 151 L387 151" stroke="#ef4444" stroke-width="3.5" class="hidden dark:block" />
+                                <path d="M387 151 Q395 147 398 153" stroke="#ef4444" stroke-width="2.5" fill="none" class="hidden dark:block" />
+                                <path d="M387 151 Q393 159 395 161" stroke="#ef4444" stroke-width="2" fill="none" class="hidden dark:block" />
+
+                                <!-- Arms -->
+                                <path d="M366 185 L352 230" stroke="#2563eb" class="dark:stroke-slate-900" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M390 182 L402 235" stroke="#2563eb" class="dark:stroke-slate-900" stroke-width="8" stroke-linecap="round"/>
+                            </g>
+
+                            <!-- Modern Accent Floaters -->
+                            <g data-depth="0.5" class="parallax-layer">
+                                <!-- Left Floater -->
+                                <!-- Light Mode: Blue Droplet -->
+                                <path d="M125 245 C125 245, 110 260, 125 275 C140 260, 125 245, 125 245 Z" fill="#2563eb" class="drop-shadow-md dark:hidden"/>
+                                <!-- Dark Mode: Ninja Shuriken -->
+                                <g class="hidden dark:block drop-shadow-[0_4px_6px_rgba(244,63,94,0.3)] animate-[spin_12s_linear_infinite]" transform="translate(125, 260)">
+                                    <path d="M 0,-15 L 3,-3 L 15,0 L 3,3 L 0,15 L -3,3 L -15,0 L -3,-3 Z" fill="#94a3b8" />
+                                    <path d="M 0,-15 L 0,0 L 15,0 Z" fill="#cbd5e1" />
+                                    <path d="M 0,15 L 0,0 L -15,0 Z" fill="#cbd5e1" />
+                                    <circle cx="0" cy="0" r="3" fill="#1e293b" />
+                                </g>
+
+                                <!-- Right Floater -->
+                                <!-- Light Mode: Blue Droplet -->
+                                <path d="M390 290 C390 290, 375 305, 390 320 C405 305, 390 290, 390 290 Z" fill="#2563eb" class="drop-shadow-md dark:hidden"/>
+                                <!-- Dark Mode: Ninja Shuriken -->
+                                <g class="hidden dark:block drop-shadow-[0_4px_6px_rgba(59,130,246,0.3)] animate-[spin_10s_linear_infinite]" transform="translate(390, 305)">
+                                    <path d="M 0,-15 L 3,-3 L 15,0 L 3,3 L 0,15 L -3,3 L -15,0 L -3,-3 Z" fill="#94a3b8" />
+                                    <path d="M 0,-15 L 0,0 L 15,0 Z" fill="#cbd5e1" />
+                                    <path d="M 0,15 L 0,0 L -15,0 Z" fill="#cbd5e1" />
+                                    <circle cx="0" cy="0" r="3" fill="#1e293b" />
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. ABOUT TAB VIEW -->
+            <div id="view-about" class="tab-view hidden-view w-full">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+                    <!-- Left Copy -->
+                    <div class="md:col-span-5 space-y-6">
+                        <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400 rounded-full border border-blue-100 dark:border-blue-900/40 inline-block">Who We Are</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white leading-tight">We craft rhythms in modern design.</h2>
+                        <p class="text-slate-500 dark:text-slate-400 leading-relaxed text-[15px]">
+                            The Phunk Collective is a chimerical bombination of designers, builders, and creative minds. I believe code and the result should bounce off the screen with confidence and a hint of obstreperousness, bringing pure energy and soul to modern interweb environments.
+                        </p>
+                        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg">99%</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 dark:text-white text-sm">99% Problems</h4>
+                                <p class="text-xs text-slate-400 dark:text-slate-500">and we'll take care of every single one of them</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Grid Cards -->
+                    <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Clickable "This is how I do" Card (Formerly Radical Play) -->
+                        <div onclick="openQaModal()" class="border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex flex-col justify-between hover:scale-[1.02] hover:border-blue-500 dark:hover:border-rose-400 transition-all duration-300 cursor-pointer group">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-rose-950/40 text-blue-600 dark:text-rose-400 flex items-center justify-center font-bold mb-4 group-hover:bg-blue-100 dark:group-hover:bg-rose-900/60 transition-colors">01</div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-rose-400 transition-colors">This is how I do</h3>
+                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">Quality assurance in gaming systems, bug hunting, and regression testing. Click to view detailed focus.</p>
+                            </div>
+                        </div>
+                        <div class="border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex flex-col justify-between hover:scale-[1.02] hover:border-pink-500 dark:hover:border-pink-400 transition-all duration-300">
+                            <div class="w-10 h-10 rounded-xl bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 flex items-center justify-center font-bold mb-4">02</div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-base">Pixel Flow</h3>
+                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">Clean alignment, robust CSS architecture, and highly responsive rendering.</p>
+                            </div>
+                        </div>
+                        <div class="border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex flex-col justify-between hover:scale-[1.02] hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 sm:col-span-2">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">03</div>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-base">Our Ultimate Goal</h3>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-3">Empowering developers to shed safe, boring constraints and build platforms featuring expressive digital energy.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. WORK TAB VIEW -->
+            <div id="view-work" class="tab-view hidden-view w-full space-y-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400 rounded-full border border-blue-100 dark:border-blue-900/40 inline-block">Creative Grooves</span>
+                        <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mt-2">Latest Productions</h2>
+                    </div>
+                    <!-- Categories Filter -->
+                    <div class="flex flex-wrap gap-2 bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl border border-slate-200/50 dark:border-slate-800/40 self-start">
+                        <button onclick="filterWork('all')" id="filter-all" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition-all duration-200">All</button>
+                        <button onclick="filterWork('web')" id="filter-web" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all duration-200">Web UI</button>
+                        <button onclick="filterWork('motion')" id="filter-motion" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all duration-200">Interactive</button>
+                        <button onclick="filterWork('brand')" id="filter-brand" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all duration-200">Identity</button>
+                    </div>
+                </div>
+
+                <!-- Projects Showcase Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="work-grid">
+                    <!-- Project 1 (Web) -->
+                    <div class="project-card border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2.5xl p-4 shadow-sm hover:shadow-xl hover:shadow-indigo-950/5 hover:-translate-y-1 transition-all duration-300" data-cat="web">
+                        <div class="h-40 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl relative overflow-hidden flex items-center justify-center">
+                            <!-- Visual Graphic -->
+                            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                            <span class="text-white text-sm font-extrabold">PHUNK PORTAL v1.0</span>
+                        </div>
+                        <div class="pt-4 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-extrabold text-slate-800 dark:text-white text-base">Interactive Web Terminal</h4>
+                                <span class="text-xs text-blue-500 dark:text-blue-400 font-bold">Web Development</span>
+                            </div>
+                            <button onclick="openProjectModal('Portal Frame', 'A beautiful experimental full screen application supporting custom audio synthetics and canvas visualization shaders.')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 (Motion) -->
+                    <div class="project-card border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2.5xl p-4 shadow-sm hover:shadow-xl hover:shadow-indigo-950/5 hover:-translate-y-1 transition-all duration-300" data-cat="motion">
+                        <div class="h-40 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl relative overflow-hidden flex items-center justify-center">
+                            <div class="absolute w-20 h-20 rounded-full border border-white/20 animate-ping"></div>
+                            <span class="text-white text-sm font-extrabold">WAVE SYNESIS</span>
+                        </div>
+                        <div class="pt-4 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-extrabold text-slate-800 dark:text-white text-base">Fluid Audio Waveforms</h4>
+                                <span class="text-xs text-pink-500 dark:text-pink-400 font-bold">Interactive Art</span>
+                            </div>
+                            <button onclick="openProjectModal('Audio Canvas Waveforms', 'A creative sandbox utilizing real-time WebGL and HTML Canvas engines mirroring audio nodes in organic waves.')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 (Brand) -->
+                    <div class="project-card border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2.5xl p-4 shadow-sm hover:shadow-xl hover:shadow-indigo-950/5 hover:-translate-y-1 transition-all duration-300" data-cat="brand">
+                        <div class="h-40 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl relative overflow-hidden flex items-center justify-center">
+                            <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,#333_25%,transparent_25%,transparent_75%,#333_75%,#333),linear-gradient(45deg,#333_25%,white_25%,white_75%,#333_75%,#333)] [background-size:20px_20px]"></div>
+                            <span class="text-white text-sm font-extrabold">PHUNKY BRAND KIT</span>
+                        </div>
+                        <div class="pt-4 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-extrabold text-slate-800 dark:text-white text-base">Dynamic Typographic Brand</h4>
+                                <span class="text-xs text-amber-500 dark:text-amber-400 font-bold">Branding</span>
+                            </div>
+                            <button onclick="openProjectModal('Retro-Modern Brand', 'Typographic design files, custom SVG vector badges, and responsive animation setups.')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. PLAY TAB VIEW (CLEAN SELECTION MATRIX) -->
+            <div id="view-play" class="tab-view active-view w-full space-y-8">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800/80 pb-5">
+                    <div>
+                        <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 dark:bg-rose-950/40 dark:text-rose-400 rounded-full border border-rose-100 dark:border-rose-900/40 inline-block">Interactive Labs</span>
+                        <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mt-2">Phunk Playground</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-medium">Select an experience below to begin creating live rhythm grids, connecting with players, or viewing socials.</p>
+                    </div>
+                    
+                    <!-- Integrated Control Toolbar (Audio Toggle + Servers button in single row) -->
+                    <div class="flex items-center gap-3 w-full sm:w-auto self-end sm:self-center">
+                        <!-- Audio Mute/Unmute Switcher -->
+                        <button id="synth-audio-toggle" onclick="toggleAudioSynthesis()" class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 rounded-xl font-bold text-xs border border-emerald-100 dark:border-emerald-900/30 transition-all duration-300">
+                            <span id="synth-audio-dot" class="w-2 h-2 rounded-full bg-rose-600 dark:bg-rose-400 animate-pulse"></span>
+                            <span id="synth-audio-text">Audio: Disabled</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Symmetric Grid entry points matching the Server Style with new Socials entry point -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                    <!-- Drum Station Card Trigger -->
+                    <div onclick="openDrumModal()" class="border border-slate-200/80 dark:border-slate-800 p-6 rounded-3xl bg-white dark:bg-slate-900 shadow-md flex flex-col justify-between hover:scale-[1.02] hover:border-rose-500 dark:hover:border-rose-400 transition-all duration-300 cursor-pointer group">
+                        <div class="flex items-center justify-between w-full mb-6">
+                            <div class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-lg group-hover:bg-rose-100 dark:group-hover:bg-rose-900/60 transition-colors">
+                                <!-- Drum Icon -->
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 0L5.25 8.25m14.25-2.25V18M12 11.25V21M3.75 18H20.25M3.75 18A2.25 2.25 0 011.5 15.75V11.25A2.25 2.25 0 013.75 9H12M3.75 18A2.25 2.25 0 006 20.25H18A2.25 2.25 0 0020.25 18m0 0A2.25 2.25 0 0022.5 15.75V11.25m0 0A2.25 2.25 0 0020.25 9H12M12 9V21"></path>
+                                </svg>
+                            </div>
+                            <span class="text-[10px] font-extrabold px-2.5 py-1 bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400 rounded-full uppercase tracking-wider">Tactile Synth</span>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 dark:text-white text-lg group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">Phunk Drum Station</h3>
+                            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                                Launch a professional 3x3 MPC controller. Trigger fat kicks, hand claps, snares, and low-synth basslines natively or with keyboard Hotkeys <strong class="font-bold">[1-9]</strong>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Game Servers Panel Card Trigger -->
+                    <div onclick="openServersModal()" class="border border-slate-200/80 dark:border-slate-800 p-6 rounded-3xl bg-white dark:bg-slate-900 shadow-md flex flex-col justify-between hover:scale-[1.02] hover:border-rose-500 dark:hover:border-rose-400 transition-all duration-300 cursor-pointer group">
+                        <div class="flex items-center justify-between w-full mb-6">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg group-hover:bg-blue-100 dark:group-hover:bg-slate-800 transition-colors">
+                                <!-- Server Box Icon -->
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a3.75 3.75 0 01.75-2.25L5.25 4.5h13.5l1.5 4.5a3.75 3.75 0 01.75 2.25M6.75 12h.008v.008H6.75V12zm0 6h.008v.008H6.75V18zm3.75-6h.008v.008h-.008V12zm0 6h.008v.008h-.008V18z"></path>
+                                </svg>
+                            </div>
+                            <span class="text-[10px] font-extrabold px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-full uppercase tracking-wider">Multiplayer</span>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 dark:text-white text-lg group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">Servers Panel</h3>
+                            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                                Access game portals and address connectors. Instantly copy address inputs for Minecraft, ARK Survival Evolved, and Rust.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- NEW: Socials Panel Card Trigger -->
+                    <div onclick="openSocialsModal()" class="border border-slate-200/80 dark:border-slate-800 p-6 rounded-3xl bg-white dark:bg-slate-900 shadow-md flex flex-col justify-between hover:scale-[1.02] hover:border-rose-500 dark:hover:border-rose-400 transition-all duration-300 cursor-pointer group">
+                        <div class="flex items-center justify-between w-full mb-6">
+                            <div class="w-12 h-12 rounded-2xl bg-pink-50 dark:bg-rose-950/40 text-pink-600 dark:text-pink-400 flex items-center justify-center font-bold text-lg group-hover:bg-pink-100 dark:group-hover:bg-rose-900/60 transition-colors">
+                                <!-- Share / Link Icon -->
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244m6.562-7.843 3.125-3.125"></path>
+                                </svg>
+                            </div>
+                            <span class="text-[10px] font-extrabold px-2.5 py-1 bg-pink-50 dark:bg-rose-950/40 text-pink-600 dark:text-pink-400 rounded-full uppercase tracking-wider">Socials</span>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 dark:text-white text-lg group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">Connect With Us</h3>
+                            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                                Join the community chat! Quickly find our official links for Discord, Instagram, GitHub, Steam, and Xbox.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Interactive Footer / Action Bar -->
+        <footer class="mt-8 md:mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800/60 pt-6">
+            <div class="flex items-center gap-2">
+                <span id="pulse-indicator" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span id="status-text" class="text-xs sm:text-sm text-slate-400 dark:text-slate-500 font-medium">Fully Interactive Community Framework</span>
+            </div>
+            <div class="text-xs sm:text-sm text-slate-400 dark:text-slate-500">
+                &copy; <span id="year">2026</span> The Phunk Collective. All rights reserved.
+            </div>
+        </footer>
+    </main>
+
+    <!-- Dedicated Drum Station Modal Popup -->
+    <div id="drum-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" onclick="closeDrumModal()"></div>
+        <!-- Dialog -->
+        <div class="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-[2.5rem] p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800/80 animate-in fade-in zoom-in-95 duration-200">
+            <!-- Close Button "x" in top right -->
+            <button onclick="closeDrumModal()" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none" aria-label="Close modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <!-- Modal Body content -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-sm">PAD</span>
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-800 dark:text-white">Phunk MPC Station</h3>
+                </div>
+                <div class="h-px bg-slate-100 dark:bg-slate-800/80 my-3"></div>
+                
+                <!-- MPC Grid -->
+                <div class="grid grid-cols-3 gap-3 p-3 sm:p-4 rounded-3xl bg-slate-50 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/80 shadow-inner">
+                    <!-- Pad 1 -->
+                    <button id="drum-pad-1" onmousedown="triggerDrum(1)" ontouchstart="event.preventDefault(); triggerDrum(1)" class="drum-pad group h-20 sm:h-24 rounded-2xl bg-white dark:bg-slate-800 border-t-[5px] border-t-rose-500 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700/80 active:scale-95 shadow-sm transition-all duration-100 flex flex-col justify-between p-3 text-left focus:outline-none focus:ring-2 focus:ring-rose-500/50">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex justify-between w-full"><span>Pad 01</span><span class="font-mono bg-slate-100 dark:bg-slate-700/80 px-1 rounded text-[9px]">[1]</span></span>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 group-hover:text-rose-600 dark:group-hover:text-rose-400">FAT KICK</span>
+                    </button>
+                    <!-- Pad 2 -->
+                    <button id="drum-pad-2" onmousedown="triggerDrum(2)" ontouchstart="event.preventDefault(); triggerDrum(2)" class="drum-pad group h-20 sm:h-24 rounded-2xl bg-white dark:bg-slate-800 border-t-[5px] border-t-orange-500 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700/80 active:scale-95 shadow-sm transition-all duration-100 flex flex-col justify-between p-3 text-left focus:outline-none focus:ring-2 focus:ring-orange-500/50">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex justify-between w-full"><span>Pad 02</span><span class="font-mono bg-slate-100 dark:bg-slate-700/80 px-1 rounded text-[9px]">[2]</span></span>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 group-hover:text-orange-500 dark:group-hover:text-orange-400">HI-HAT</span>
+                    </button>
+                    <!-- Pad 3 -->
+                    <button id="drum-pad-3" onmousedown="triggerDrum(3)" ontouchstart="event.preventDefault(); triggerDrum(3)" class="drum-pad group h-20 sm:h-24 rounded-2xl bg-white dark:bg-slate-800 border-t-[5px] border-t-yellow-500 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700/80 active:scale-95 shadow-sm transition-all duration-100 flex flex-col justify-between p-3 text-left focus:outline-none focus:ring-2 focus:ring-yellow-500/50">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex justify-between w-full"><span>Pad 03</span><span class="font-mono bg-slate-100 dark:bg-slate-700/80 px-1 rounded text-[9px]">[3]</span></span>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 group-hover:text-yellow-500 dark:group-hover:text-yellow-400">LO-FI SNARE</span>
+                    </button>
+                    <!-- Pad 4 -->
+                    <button id="drum-pad-4" onmousedown="triggerDrum(4)" ontouchstart="event.preventDefault(); triggerDrum(4)" class="drum-pad group h-20 sm:h-24 rounded-2xl bg-white dark:bg-slate-800 border-t-[5px] border-t-emerald-500 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700/80 active:scale-95 shadow-sm transition-all duration-100 flex flex-col justify-between p-3 text-left focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex justify-between w-full"><span>Pad 04</span><span class="font-mono bg-slate-100 dark:bg-slate-700/80 px-1 rounded text-[9px]">[4]</span></span>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 group-hover:text-emerald-500 dark:group-hover:text-emerald-400">HAND CLAP</span>
+                    </button>
+                    <!-- Pad 5 -->
+                    <button id="drum-pad-5" onmousedown="triggerDrum(5)" ontouchstart="event.preventDefault(); triggerDrum(5)" class="drum-pad group h-20 sm:h-24 rounded-2xl bg-white dark:bg-slate-800 border-t-[5px] border-t-teal-500 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700/80 active:scale-95 shadow-sm transition-all duration-100 flex flex-col justify-between p-3 text-left focus:outline-none focus:ring-2 focus:ring-teal-500/50">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex justify-between w-full"><span>Pad 05</span><span class="font-mono bg-slate-100 dark:bg-slate-700/80 px-1 rounded text-[9px]">[5]</span></span>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 group-hover:text-teal-500 dark:group-hover:text-teal-400">RIM SHOT</span>
+                    </button>
+                    <!-- Pad 6 -->
+                    <button id="drum-pad-6" onmousedown="triggerDrum(6)" ontouchstart="event.preventDefault(); triggerDrum(6)" class="drum-pad group h-20 sm:h-24 rounded-2xl bg-white dark:bg-slate-800 border-t-[5px] border-t-cyan-500 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700/80 active:scale-95 shadow-sm transition-all duration-100 flex flex-col justify-between p-3 text-left focus:outline-none focus:ring-2 focus:ring-cyan-500/50">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex justify-between w-full"><span>Pad 06</span><span class="font-mono bg-slate-100 dark:bg-slate-700/80 px-1 rounded text-[9px]">[6]</span></span>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 group-hover:text-cyan-500 dark:group-hover:text-cyan-400">COWBELL</span>
+                    </button>
+                    <!-- Pad 7 -->
+                    <button id="drum-pad-7" onmousedown="triggerDrum(7)" ontouchstart="event.preventDefault(); triggerDrum(7)" class="drum-pad group h-20 sm:h-24 rounded-2xl bg-white dark:bg-slate-800 border-t-[5px] border-t-blue-500 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700/80 active:scale-95 shadow-sm transition-all duration-100 flex flex-col justify-between p-3 text-left focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex justify-between w-full"><span>Pad 07</span><span class="font-mono bg-slate-100 dark:bg-slate-700/80 px-1 rounded text-[9px]">[7]</span></span>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 group-hover:text-blue-500 dark:group-hover:text-blue-400">LOW TOM</span>
+                    </button>
+                    <!-- Pad 8 -->
+                    <button id="drum-pad-8" onmousedown="triggerDrum(8)" ontouchstart="event.preventDefault(); triggerDrum(8)" class="drum-pad group h-20 sm:h-24 rounded-2xl bg-white dark:bg-slate-800 border-t-[5px] border-t-indigo-500 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700/80 active:scale-95 shadow-sm transition-all duration-100 flex flex-col justify-between p-3 text-left focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex justify-between w-full"><span>Pad 08</span><span class="font-mono bg-slate-100 dark:bg-slate-700/80 px-1 rounded text-[9px]">[8]</span></span>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 group-hover:text-indigo-500 dark:group-hover:text-indigo-400">HIGH TOM</span>
+                    </button>
+                    <!-- Pad 9 -->
+                    <button id="drum-pad-9" onmousedown="triggerDrum(9)" ontouchstart="event.preventDefault(); triggerDrum(9)" class="drum-pad group h-20 sm:h-24 rounded-2xl bg-white dark:bg-slate-800 border-t-[5px] border-t-violet-500 border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700/80 active:scale-95 shadow-sm transition-all duration-100 flex flex-col justify-between p-3 text-left focus:outline-none focus:ring-2 focus:ring-violet-500/50">
+                        <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex justify-between w-full"><span>Pad 09</span><span class="font-mono bg-slate-100 dark:bg-slate-700/80 px-1 rounded text-[9px]">[9]</span></span>
+                        <span class="text-[11px] sm:text-xs font-extrabold text-slate-700 dark:text-slate-200 group-hover:text-violet-500 dark:group-hover:text-violet-400">SYNTH LOW</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeDrumModal()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-rose-600 dark:hover:bg-rose-700 text-white font-bold rounded-xl transition-colors text-sm shadow-md">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dedicated Socials Modal Popup -->
+    <div id="socials-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" onclick="closeSocialsModal()"></div>
+        <!-- Dialog -->
+        <div class="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-[2rem] p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800/80 animate-in fade-in zoom-in-95 duration-200">
+            <!-- Close Button "x" in top right -->
+            <button onclick="closeSocialsModal()" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none" aria-label="Close modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <!-- Modal Body content -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-950/40 text-pink-600 dark:text-pink-400 flex items-center justify-center font-bold text-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244m6.562-7.843 3.125-3.125"></path>
+                        </svg>
+                    </span>
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-800 dark:text-white">Our Social Links</h3>
+                </div>
+                <div class="h-px bg-slate-100 dark:bg-slate-800/80 my-3"></div>
+                
+                <!-- Social Channels Grid -->
+                <div class="grid grid-cols-1 gap-3 max-h-[320px] overflow-y-auto pr-1">
+                    
+                    <!-- Discord -->
+                    <a href="https://discord.gg" target="_blank" onclick="showToast('Navigating to Discord...')" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-950/40 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20 border border-slate-200/60 dark:border-slate-800/80 transition-all duration-200 group">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#5865F2]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.094 13.094 0 0 1-1.873-.894.077.077 0 0 1-.008-.128c.126-.093.252-.19.372-.287a.075.075 0 0 1 .077-.011c3.92 1.793 8.18 1.793 12.061 0a.073.073 0 0 1 .078.009c.12.099.246.195.373.289a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.156 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.156-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.156 2.418z"/>
+                            </svg>
+                            <span class="font-bold text-slate-700 dark:text-slate-300 text-sm">Discord Community</span>
+                        </div>
+                        <span class="text-xs text-indigo-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">Join Chat &rarr;</span>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a href="https://instagram.com" target="_blank" onclick="showToast('Navigating to Instagram...')" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-950/40 hover:bg-pink-50/50 dark:hover:bg-pink-950/20 border border-slate-200/60 dark:border-slate-800/80 transition-all duration-200 group">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#E1306C]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                            </svg>
+                            <span class="font-bold text-slate-700 dark:text-slate-300 text-sm">Instagram Feed</span>
+                        </div>
+                        <span class="text-xs text-pink-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">Follow &rarr;</span>
+                    </a>
+
+                    <!-- GitHub -->
+                    <a href="https://github.com" target="_blank" onclick="showToast('Navigating to GitHub...')" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-950/40 hover:bg-slate-100/50 dark:hover:bg-slate-850 border border-slate-200/60 dark:border-slate-800/80 transition-all duration-200 group">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-slate-900 dark:text-slate-100" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-12-10z"/>
+                            </svg>
+                            <span class="font-bold text-slate-700 dark:text-slate-300 text-sm">GitHub Repository</span>
+                        </div>
+                        <span class="text-xs text-slate-800 dark:text-slate-100 font-bold opacity-0 group-hover:opacity-100 transition-opacity">View Code &rarr;</span>
+                    </a>
+
+                    <!-- Steam -->
+                    <a href="https://store.steampowered.com" target="_blank" onclick="showToast('Navigating to Steam...')" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-950/40 hover:bg-slate-100/50 dark:hover:bg-slate-850 border border-slate-200/60 dark:border-slate-800/80 transition-all duration-200 group">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#171a21] dark:text-[#66c0f4]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 .002a11.996 11.996 0 0 0-11.968 10.74l5.12 2.12c.31-.22.68-.37 1.08-.43L9.2 8.7a3.522 3.522 0 0 1 3.49-3.11 3.522 3.522 0 0 1 3.53 3.53 3.525 3.525 0 0 1-3.53 3.53H12.6c-.03.4-.18.77-.42 1.08l2.12 5.12c2.45-.63 4.29-2.73 4.61-5.3a5.525 5.525 0 0 0-4.61-4.61zm.69 11.13a2.316 2.316 0 0 0 2.33-2.32 2.317 2.317 0 0 0-2.33-2.32 2.315 2.315 0 0 0-2.33 2.32c0 1.21.93 2.19 2.13 2.3l-.01.02zM1.01 12c.07.28.17.55.29.81l3.52-1.46c-.05-.28-.08-.57-.08-.87 0-.41.07-.81.2-1.18L1.01 12zM5.56 12.3c.09.28.23.53.4.76l1.39-3.34c-.2-.17-.4-.3-.63-.4l-1.16 2.98z"/>
+                            </svg>
+                            <span class="font-bold text-slate-700 dark:text-slate-300 text-sm">Steam Group</span>
+                        </div>
+                        <span class="text-xs text-[#66c0f4] font-bold opacity-0 group-hover:opacity-100 transition-opacity">Connect &rarr;</span>
+                    </a>
+
+                    <!-- Xbox -->
+                    <a href="https://xbox.com" target="_blank" onclick="showToast('Navigating to Xbox Live...')" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-950/40 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 border border-slate-200/60 dark:border-slate-800/80 transition-all duration-200 group">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-6 h-6 text-[#107c10]" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.62 0C5.16 0 0 5.21 0 11.64c0 1.25.19 2.45.54 3.59 1.48-1.92 4.14-3.66 7.4-4.57-1.18-.74-2.52-1.13-3.95-1.13-1.12 0-2.18.23-3.15.65.98-2.6 3.12-4.63 5.83-5.49-.66.57-1.19 1.34-1.53 2.22-.38.97-.47 2.01-.26 3.03.95-.57 2.03-.9 3.18-.94.02-.03.04-.06.06-.09 1.39-1.97 3.39-3.23 5.56-3.48-.3.65-.43 1.38-.38 2.11.08.97.48 1.88 1.13 2.6.86-.34 1.79-.52 2.76-.52 1.49 0 2.87.41 4.07 1.11-1.39-3.76-4.9-6.49-9.1-6.49zm5.34 11.39c.67.62 1.15 1.43 1.37 2.33.24.97.16 1.99-.21 2.91 1.77-.92 3.28-2.3 4.34-3.98-1.16.59-2.45.92-3.78.95-.6-.83-1.28-1.55-2.02-2.14.1.28.14.58.11.87-.04.72-.37 1.39-.89 1.87-.58.53-1.34.8-2.12.76-.23-.01-.46-.06-.68-.14.7.75 1.54 1.36 2.49 1.8 1.33.62 2.81.93 4.31.93.36 0 .72-.02 1.07-.06-1.57 2.63-4.46 4.39-7.77 4.39-2.09 0-4.02-.71-5.56-1.9 2.5-.47 4.9-1.61 6.84-3.32-.42.06-.85.09-1.28.09-2.22 0-4.32-.71-6.07-2.01 1.34 1.88 3.29 3.21 5.53 3.75-1.2.66-2.58 1.02-4.04 1.02-3.32 0-6.22-1.77-7.79-4.4 2.22-.38 4.34-1.42 6.07-2.99z"/>
+                            </svg>
+                            <span class="font-bold text-slate-700 dark:text-slate-300 text-sm">Xbox Live Profile</span>
+                        </div>
+                        <span class="text-xs text-[#107c10] font-bold opacity-0 group-hover:opacity-100 transition-opacity">Add Friend &rarr;</span>
+                    </a>
+
+                </div>
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeSocialsModal()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-rose-600 dark:hover:bg-rose-700 text-white font-bold rounded-xl transition-colors text-sm shadow-md">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dedicated Servers Modal Popup -->
+    <div id="servers-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" onclick="closeServersModal()"></div>
+        <!-- Dialog -->
+        <div class="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[2rem] p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800/80 animate-in fade-in zoom-in-95 duration-200">
+            <!-- Close Button "x" in top right -->
+            <button onclick="closeServersModal()" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none" aria-label="Close modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <!-- Modal Body content -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-sm">MC</span>
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-800 dark:text-white">Active Game Servers</h3>
+                </div>
+                <div class="h-px bg-slate-100 dark:bg-slate-800/80 my-3"></div>
+                
+                <!-- Server List Grid Container -->
+                <div class="space-y-4 max-h-[350px] overflow-y-auto pr-1">
+                    
+                    <!-- 1. Minecraft Server Entry Card -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/40 border border-slate-200/60 dark:border-slate-800/80 shadow-md">
+                        <div class="flex items-center gap-4">
+                            <!-- Custom Grass block SVG representation for Minecraft -->
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0 border border-slate-200/30 dark:border-slate-700/30">
+                                <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Grass layer -->
+                                    <rect x="0" y="0" width="32" height="12" fill="#16a34a"/>
+                                    <!-- Dirt layer -->
+                                    <rect x="0" y="12" width="32" height="20" fill="#78350f"/>
+                                    <!-- Pixel details -->
+                                    <rect x="4" y="4" width="4" height="4" fill="#15803d"/>
+                                    <rect x="20" y="2" width="4" height="4" fill="#15803d"/>
+                                    <rect x="12" y="16" width="4" height="4" fill="#451a03"/>
+                                    <rect x="24" y="20" width="4" height="4" fill="#451a03"/>
+                                </svg>
+                            </div>
+                            
+                            <!-- Server Information with unique Minecraft font -->
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="minecraft-font text-xs sm:text-sm tracking-wider text-slate-800 dark:text-emerald-400">MINECRAFT</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/30">Vanilla 1.20</span>
+                                </div>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                                    mc.thephunkcollective.com &bull; <strong class="text-slate-500 dark:text-slate-400 font-bold">12/100 online</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Connect / Copy action button -->
+                        <button onclick="copyServerIP('mc.thephunkcollective.com')" class="w-full sm:w-auto px-5 py-2.5 bg-slate-800 dark:bg-rose-600 hover:bg-slate-900 dark:hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition-all-custom flex items-center justify-center gap-2 shrink-0 transform hover:-translate-y-0.5">
+                            <span>Connect</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M19.5 17.25c0-3.176-1.558-5.99-3.953-7.75"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- 2. ARK Survival Evolved Server Entry Card (COMING SOON) -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-950/20 border border-slate-200/40 dark:border-slate-800/40 opacity-80">
+                        <div class="flex items-center gap-4">
+                            <!-- Official metallic A-shaped implant specimen obelisk logo for ARK -->
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0 border border-slate-200/30 dark:border-slate-700/30">
+                                <svg class="w-10 h-10 text-cyan-500 animate-pulse" viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Bio-mechanical 'A' implant base -->
+                                    <path d="M32 4 L48 52 L32 40 L16 52 Z" fill-opacity="0.15" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+                                    <!-- Inner crystal obsidian energy core -->
+                                    <path d="M32 10 L42 44 L32 35 L22 44 Z" fill="currentColor" stroke="currentColor" stroke-width="1.5"/>
+                                    <!-- Mechanical alignment ribs -->
+                                    <line x1="32" y1="12" x2="32" y2="35" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="26" y1="28" x2="38" y2="28" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+                                    <!-- Orbiting alignment nodes -->
+                                    <circle cx="32" cy="6" r="1.5" fill="currentColor"/>
+                                    <circle cx="49" cy="54" r="1.5" fill="currentColor"/>
+                                    <circle cx="15" cy="54" r="1.5" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            
+                            <!-- Server Information -->
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="ark-font text-sm font-extrabold uppercase text-slate-700 dark:text-cyan-400">ARK: SURVIVAL</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200/30">ASA 1.0</span>
+                                </div>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 inline-block"></span>
+                                    Pending setup &bull; clusters offline
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Coming Soon Badge -->
+                        <span class="w-full sm:w-auto px-4 py-2 bg-slate-200/50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-bold rounded-xl text-center shrink-0 border border-slate-200 dark:border-slate-700">
+                            Coming Soon
+                        </span>
+                    </div>
+
+                    <!-- 3. Rust Server Entry Card (COMING SOON) -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-950/20 border border-slate-200/40 dark:border-slate-800/40 opacity-80">
+                        <div class="flex items-center gap-4">
+                            <!-- Official RUST Stencil Split Hazmat Shield Logo -->
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0 border border-slate-200/30 dark:border-slate-700/30">
+                                <svg class="w-9 h-9 text-orange-600" viewBox="0 0 128 128" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Clean industrial rust stencil symbol -->
+                                    <path d="M 12 12 H 116 V 116 H 12 Z" fill-opacity="0.1" stroke="currentColor" stroke-width="8"/>
+                                    <!-- Distressed diagonal split bar -->
+                                    <path d="M 28 28 L 100 100" stroke="currentColor" stroke-width="16" stroke-linecap="square"/>
+                                    <!-- Bottom-left and Top-right stencil blocks -->
+                                    <rect x="24" y="74" width="30" height="30" rx="4" />
+                                    <rect x="74" y="24" width="30" height="30" rx="4" />
+                                </svg>
+                            </div>
+                            
+                            <!-- Server Information -->
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="rust-font font-black uppercase text-base text-slate-700 dark:text-orange-500">RUST</span>
+                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200/30">Monthly Wipe</span>
+                                </div>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 font-medium flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 inline-block"></span>
+                                    Phunky rustlands &bull; pending host
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Coming Soon Badge -->
+                        <span class="w-full sm:w-auto px-4 py-2 bg-slate-200/50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-bold rounded-xl text-center shrink-0 border border-slate-200 dark:border-slate-700">
+                            Coming Soon
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeServersModal()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-rose-600 dark:hover:bg-rose-700 text-white font-bold rounded-xl transition-colors text-sm shadow-md">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dedicated QA Modal Popup ("This is how I do") -->
+    <div id="qa-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" onclick="closeQaModal()"></div>
+        <!-- Dialog -->
+        <div class="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[2rem] p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800/80 animate-in fade-in zoom-in-95 duration-200">
+            <!-- Close Button "x" in top right -->
+            <button onclick="closeQaModal()" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none" aria-label="Close modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <!-- Modal Body content -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-sm">QA</span>
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-800 dark:text-white">This is how I do</h3>
+                </div>
+                <div class="h-px bg-slate-100 dark:bg-slate-800/80 my-3"></div>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    I work in quality assurance for 7 Days to Die, where I help improve the overall player experience by testing gameplay systems, finding bugs, and making sure new updates run smoothly. My day-to-day work includes testing mechanics like combat, crafting, zombie AI, world generation, and multiplayer features across different builds. I regularly reproduce and document issues, perform regression testing after patches, and work closely with the team to help identify problems before they reach players. Being part of the QA process has strengthened my attention to detail, communication skills, and ability to think critically about gameplay and user experience.
+                </p>
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeQaModal()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-rose-600 dark:hover:bg-rose-700 text-white font-bold rounded-xl transition-colors text-sm shadow-md">
+                    Perfect
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project dynamic description modal popup -->
+    <div id="project-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" onclick="closeProjectModal()"></div>
+        <!-- Dialog -->
+        <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200">
+            <h3 id="modal-project-title" class="text-xl font-extrabold text-slate-800 dark:text-white">Project Case</h3>
+            <p id="modal-project-desc" class="text-sm text-slate-500 dark:text-slate-400 mt-3 leading-relaxed">Details of the creative setup.</p>
+            <div class="mt-6 flex items-center gap-3">
+                <button onclick="closeProjectModal()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors">Perfect</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Component Preview Drawer (Styled for light & dark mode) -->
+    <div id="preview-drawer" class="fixed inset-y-0 right-0 w-full max-w-lg bg-white dark:bg-slate-900 shadow-2xl border-l border-slate-100 dark:border-slate-800/80 z-50 transform translate-x-full transition-transform duration-500 ease-in-out flex flex-col">
+        <!-- Drawer Header -->
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
+            <h2 id="drawer-title" class="text-xl font-bold text-slate-800 dark:text-white">Available Templates</h2>
+            <button onclick="togglePreviewDrawer()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Drawer Content Area -->
+        <div class="p-6 flex-1 overflow-y-auto space-y-6" id="drawer-content">
+            <!-- Dynamic components inserted here -->
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="p-6 border-t border-slate-100 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-950/30 flex items-center gap-3">
+            <button onclick="copyNotification()" class="flex-1 py-3 bg-slate-800 dark:bg-slate-100 hover:bg-slate-900 dark:hover:bg-white text-white dark:text-slate-900 rounded-xl font-semibold transition-all duration-300">
+                Deploy Instantly
+            </button>
+            <button onclick="togglePreviewDrawer()" class="px-5 py-3 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-semibold transition-all duration-300">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Transparent Drawer Overlay Backdrop -->
+    <div id="drawer-overlay" class="fixed inset-0 bg-slate-900/20 dark:bg-black/40 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-500" onclick="togglePreviewDrawer()"></div>
+
+    <!-- Customized Elegant Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span id="toast-text" class="text-[14px] font-medium">Draft action succeeded!</span>
+    </div>
+
+    <!-- Page interactivity, Theme Switching, Tabs and Play Sandbox Sandbox scripts -->
+    <script>
+        // Automatic Year update
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Tracker values for parallax/interactivity
+        const mainCard = document.getElementById('main-card');
+        const glow = document.getElementById('interactive-glow');
+        const layers = document.querySelectorAll('.parallax-layer');
+        const orb1 = document.getElementById('orb-1');
+        const orb2 = document.getElementById('orb-2');
+        const orb3 = document.getElementById('orb-3');
+
+        // Check stored theme preference on load (Defaults to Light Mode if none is manually saved)
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            updateGlowColor(true);
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            updateGlowColor(false);
+        }
+
+        // Active Theme Toggler
+        function toggleTheme() {
+            document.body.classList.add('theme-transition');
+            const isDarkNow = document.documentElement.classList.contains('dark');
+            if (isDarkNow) {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                updateGlowColor(false);
+                showToast("Switched to Light Mode (Tech Professionals)");
+            } else {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+                localStorage.setItem('theme', 'dark');
+                updateGlowColor(true);
+                showToast("Switched to Dark Mode (Stealth Ninjas!)");
+            }
+        }
+
+        // Update radial gradient color dynamically based on theme
+        function updateGlowColor(isDark) {
+            if (isDark) {
+                glow.style.setProperty('--glow-color', 'rgba(129, 140, 248, 0.12)');
+            } else {
+                glow.style.setProperty('--glow-color', 'rgba(99, 102, 241, 0.15)');
+            }
+        }
+
+        // Tab views swap navigation logic
+        function switchTab(tabId) {
+            // Remove active style from all nav buttons and hide all views
+            const tabs = ['home', 'about', 'work', 'play'];
+            
+            tabs.forEach(item => {
+                const navBtn = document.getElementById(`nav-${item}`);
+                const view = document.getElementById(`view-${item}`);
+                
+                if (item === tabId) {
+                    navBtn.className = "nav-link relative text-[15px] font-bold text-blue-600 dark:text-blue-400 py-1 focus:outline-none";
+                    navBtn.querySelector('.nav-line').classList.remove('scale-x-0');
+                    navBtn.querySelector('.nav-line').classList.add('scale-x-100');
+                    
+                    view.classList.remove('hidden-view', 'hidden');
+                    view.classList.add('active-view');
+                } else {
+                    navBtn.className = "nav-link relative text-[15px] font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 py-1 focus:outline-none";
+                    navBtn.querySelector('.nav-line').classList.add('scale-x-0');
+                    navBtn.querySelector('.nav-line').classList.remove('scale-x-100');
+                    
+                    view.classList.add('hidden-view', 'hidden');
+                    view.classList.remove('active-view');
+                }
+            });
+
+            // Specific initialization triggers per view
+            if (tabId === 'play') {
+                initDrumMachine();
+            } else {
+                closeDrumModal();
+                closeServersModal();
+                closeSocialsModal();
+            }
+
+            // Update footer status message
+            const statusText = document.getElementById('status-text');
+            const pulse = document.getElementById('pulse-indicator');
+            if (tabId === 'home') {
+                statusText.textContent = "Fully Interactive Community Framework";
+                pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+            } else if (tabId === 'about') {
+                statusText.textContent = "Exploring The Phunk Philosophy";
+                pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse";
+            } else if (tabId === 'work') {
+                statusText.textContent = "Browsing Creative Productions";
+                pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse";
+            } else if (tabId === 'play') {
+                statusText.textContent = "Drum Pad Station Active";
+                pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse";
+            }
+
+            showToast(`Swapped to: ${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
+        }
+
+        // Work Grid filtering logic
+        function filterWork(category) {
+            const cards = document.querySelectorAll('.project-card');
+            const btns = document.querySelectorAll('.filter-btn');
+
+            // Style active filter button
+            btns.forEach(btn => {
+                if (btn.id === `filter-${category}`) {
+                    btn.className = "filter-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition-all duration-200";
+                } else {
+                    btn.className = "filter-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all duration-200";
+                }
+            });
+
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-cat') === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Project details case-study pop-up modal
+        function openProjectModal(title, description) {
+            document.getElementById('modal-project-title').textContent = title;
+            document.getElementById('modal-project-desc').textContent = description;
+            const modal = document.getElementById('project-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Close project description modal
+        function closeProjectModal() {
+            const modal = document.getElementById('project-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        /* --- Dedicated QA Modal Actions --- */
+        function openQaModal() {
+            const modal = document.getElementById('qa-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            showToast("Opening QA Profile Details");
+        }
+
+        function closeQaModal() {
+            const modal = document.getElementById('qa-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        /* --- Dedicated Drum Station Modal Actions --- */
+        function openDrumModal() {
+            const modal = document.getElementById('drum-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                showToast("Opening Phunk Rhythm Station");
+            }
+        }
+
+        // Close drum modal
+        function closeDrumModal() {
+            const modal = document.getElementById('drum-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        /* --- Dedicated Servers Modal Actions --- */
+        function openServersModal() {
+            const modal = document.getElementById('servers-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            showToast("Opening Active Servers List");
+        }
+
+        function closeServersModal() {
+            const modal = document.getElementById('servers-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        /* --- Dedicated Socials Modal Actions --- */
+        function openSocialsModal() {
+            const modal = document.getElementById('socials-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            showToast("Opening Socials Panel");
+        }
+
+        function closeSocialsModal() {
+            const modal = document.getElementById('socials-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        /* --- Secure Text-to-Clipboard Server Connector --- */
+        function copyServerIP(ip) {
+            const el = document.createElement('textarea');
+            el.value = ip;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast("Minecraft Server IP copied! Add to your game server list.");
+        }
+
+        /* --- THE PHUNK DRUM MACHINE SYNTHESIS LOGIC (Web Audio API) --- */
+        let audioCtx = null;
+        let synthesisEnabled = false;
+        let noiseBuffer = null;
+
+        function initDrumMachine() {
+            if (!synthesisEnabled) {
+                showToast("Launch Phunk Drum Station or tap keys [1-9] to begin!");
+            }
+        }
+
+        function toggleAudioSynthesis() {
+            synthesisEnabled = !synthesisEnabled;
+            const btnDot = document.getElementById('synth-audio-dot');
+            const btnTxt = document.getElementById('synth-audio-text');
+            const btn = document.getElementById('synth-audio-toggle');
+            
+            if (synthesisEnabled) {
+                // Initialize audio context
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    buildNoiseBuffer();
+                }
+                btnDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                btnTxt.textContent = "Audio: Active";
+                btn.className = "flex items-center gap-2 px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 rounded-xl font-bold text-xs border border-emerald-100 dark:border-emerald-900/30 transition-all duration-300";
+                showToast("Phunk Synthesizer enabled! Start tapping pads.");
+            } else {
+                btnDot.className = "w-2.5 h-2.5 rounded-full bg-rose-600 dark:bg-rose-400 animate-pulse";
+                btnTxt.textContent = "Audio: Disabled";
+                btn.className = "flex items-center gap-2 px-4 py-2.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 rounded-xl font-bold text-xs border border-rose-100 dark:border-rose-900/30 transition-all duration-300";
+                showToast("Synthesizer muted.");
+            }
+        }
+
+        // Shared noise buffer for snares, hats, and claps
+        function buildNoiseBuffer() {
+            const bufferSize = audioCtx.sampleRate * 2;
+            noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+        }
+
+        // Trigger Synth Sound by Pad ID
+        function triggerDrum(padNum) {
+            if (!synthesisEnabled) {
+                toggleAudioSynthesis();
+            }
+            if (!audioCtx) return;
+
+            // Ensure AudioContext is running
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const now = audioCtx.currentTime;
+
+            switch(padNum) {
+                case 1: // FAT KICK
+                    playKick(now);
+                    break;
+                case 2: // HI-HAT
+                    playHat(now);
+                    break;
+                case 3: // LO-FI SNARE
+                    playSnare(now);
+                    break;
+                case 4: // HAND CLAP
+                    playClap(now);
+                    break;
+                case 5: // RIM SHOT
+                    playRim(now);
+                    break;
+                case 6: // COWBELL
+                    playCowbell(now);
+                    break;
+                case 7: // LOW TOM
+                    playTom(now, 100, 50);
+                    break;
+                case 8: // HIGH TOM
+                    playTom(now, 200, 100);
+                    break;
+                case 9: // SYNTH LOW
+                    playSynthTone(now, 130.81, 'triangle'); // C3
+                    break;
+            }
+        }
+
+        // Keyboard Controls mapping [1] through [9]
+        window.addEventListener('keydown', (e) => {
+            // Prevent playing on inputs
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            // Normalize key down events for main numbers and numpad
+            let padNum = null;
+            if (e.key >= '1' && e.key <= '9') {
+                padNum = parseInt(e.key);
+            }
+            
+            if (padNum && padNum >= 1 && padNum <= 9) {
+                // Autolaunch modal for convenient hardware feel!
+                const drumModal = document.getElementById('drum-modal');
+                if (drumModal && drumModal.classList.contains('hidden')) {
+                    openDrumModal();
+                }
+
+                // Play drum
+                triggerDrum(padNum);
+                
+                // Visual click/press feedback
+                const padEl = document.getElementById(`drum-pad-${padNum}`);
+                if (padEl) {
+                    padEl.classList.add('scale-95', 'brightness-110', 'ring-4', 'ring-rose-500/50');
+                }
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            let padNum = null;
+            if (e.key >= '1' && e.key <= '9') {
+                padNum = parseInt(e.key);
+            }
+            
+            if (padNum && padNum >= 1 && padNum <= 9) {
+                // Remove visual click/press feedback
+                const padEl = document.getElementById(`drum-pad-${padNum}`);
+                if (padEl) {
+                    padEl.classList.remove('scale-95', 'brightness-110', 'ring-4', 'ring-rose-500/50');
+                }
+            }
+        });
+
+        // Kick Synth (Pitch frequency sweep + volume envelope)
+        function playKick(time) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.frequency.setValueAtTime(150, time);
+            osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.35);
+
+            gain.gain.setValueAtTime(1.0, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.35);
+
+            osc.start(time);
+            osc.stop(time + 0.35);
+        }
+
+        // Hi-Hat Synth (Filtered noise + ultra-fast decay envelope)
+        function playHat(time) {
+            const source = audioCtx.createBufferSource();
+            source.buffer = noiseBuffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'highpass';
+            filter.frequency.setValueAtTime(7500, time);
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.3, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+
+            source.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            source.start(time);
+            source.stop(time + 0.08);
+        }
+
+        // Snare Drum Synth (Combines tone sweep + noise snap)
+        function playSnare(time) {
+            // Snap component
+            const osc = audioCtx.createOscillator();
+            const oscGain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(180, time);
+            osc.frequency.exponentialRampToValueAtTime(100, time + 0.1);
+            oscGain.gain.setValueAtTime(0.7, time);
+            oscGain.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+            osc.connect(oscGain);
+            oscGain.connect(audioCtx.destination);
+
+            // Noise rattle component
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = noiseBuffer;
+            const noiseFilter = audioCtx.createBiquadFilter();
+            noiseFilter.type = 'bandpass';
+            noiseFilter.frequency.value = 1000;
+            const noiseGain = audioCtx.createGain();
+            noiseGain.gain.setValueAtTime(0.5, time);
+            noiseGain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.1);
+            noise.start(time);
+            noise.stop(time + 0.25);
+        }
+
+        // Hand Clap Synth (Rapid multi-triggered noise burst)
+        function playClap(time) {
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = noiseBuffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 1200;
+
+            const gain = audioCtx.createGain();
+            // Three micro bursts
+            gain.gain.setValueAtTime(0.6, time);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.015);
+            gain.gain.setValueAtTime(0.6, time + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.01, time + 0.035);
+            // Long fade out
+            gain.gain.setValueAtTime(0.6, time + 0.04);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.28);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            noise.start(time);
+            noise.stop(time + 0.28);
+        }
+
+        // Rim Shot Synth (Short, sharp high-pitch wooden snap)
+        function playRim(time) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1400, time);
+            osc.frequency.exponentialRampToValueAtTime(300, time + 0.05);
+
+            gain.gain.setValueAtTime(0.8, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.05);
+        }
+
+        // Cowbell Synth (Tuned metallic dual oscillator square waves)
+        function playCowbell(time) {
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            osc1.type = 'square';
+            osc2.type = 'square';
+            osc1.frequency.value = 560; // Classical 808 tuning frequencies
+            osc2.frequency.value = 845;
+
+            filter.type = 'bandpass';
+            filter.frequency.value = 1000;
+
+            gain.gain.setValueAtTime(0.5, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+
+            osc1.connect(filter);
+            osc2.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc1.start(time);
+            osc2.start(time);
+            osc1.stop(time + 0.25);
+            osc2.stop(time + 0.25);
+        }
+
+        // Tom Synth (Medium-pitch resonant percussion sweep)
+        function playTom(time, startFreq, endFreq) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(startFreq, time);
+            osc.frequency.exponentialRampToValueAtTime(endFreq, time + 0.25);
+
+            gain.gain.setValueAtTime(0.8, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.25);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.25);
+        }
+
+        // Melodic/Harmonic Synth Pluck
+        function playSynthTone(time, freq, type) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            osc.type = type;
+            osc.frequency.value = freq;
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(2000, time);
+            filter.frequency.exponentialRampToValueAtTime(200, time + 0.4);
+
+            gain.gain.setValueAtTime(0.4, time);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + 0.5);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(time);
+            osc.stop(time + 0.5);
+        }
+
+        /* --- THEME, PARALLAX, GLOW, MOUSE TRACKING --- */
+
+        // Smoothly follow Mouse Movement across the entire Screen
+        window.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+
+            const xPct = (clientX / w) * 100;
+            const yPct = (clientY / h) * 100;
+
+            glow.style.setProperty('--mouse-x', `${xPct}%`);
+            glow.style.setProperty('--mouse-y', `${yPct}%`);
+
+            const driftX = (clientX - w / 2) * 0.05;
+            const driftY = (clientY - h / 2) * 0.05;
+            orb1.style.transform = `translate(${driftX}px, ${driftY}px)`;
+            orb2.style.transform = `translate(${-driftX * 0.7}px, ${-driftY * 0.7}px)`;
+            orb3.style.transform = `translate(${driftX * 1.2}px, ${-driftY * 0.5}px)`;
+
+            const cardRect = mainCard.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            const mouseFromCardX = clientX - cardCenterX;
+            const mouseFromCardY = clientY - cardCenterY;
+
+            const tiltX = (mouseFromCardY / (window.innerHeight / 2)) * -2.5;
+            const tiltY = (mouseFromCardX / (window.innerWidth / 2)) * 2.5;
+
+            mainCard.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+
+            const homeView = document.getElementById('view-home');
+            if (homeView && !homeView.classList.contains('hidden-view')) {
+                layers.forEach(layer => {
+                    const depth = parseFloat(layer.getAttribute('data-depth') || 0.2);
+                    const xOffset = mouseFromCardX * depth * 0.15;
+                    const yOffset = mouseFromCardY * depth * 0.15;
+                    layer.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+                });
+            }
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mainCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            layers.forEach(layer => {
+                layer.style.transform = `translate(0px, 0px)`;
+            });
+            orb1.style.transform = 'translate(0px, 0px)';
+            orb2.style.transform = 'translate(0px, 0px)';
+            orb3.style.transform = 'translate(0px, 0px)';
+        });
+
+        function togglePreviewDrawer(type = '') {
+            const drawer = document.getElementById('preview-drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            const isOpen = !drawer.classList.contains('translate-x-full');
+
+            if (isOpen || !type) {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('opacity-100');
+            } else {
+                renderDrawerContent(type);
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.add('opacity-100');
+                }, 50);
+            }
+        }
+
+        function renderDrawerContent(type) {
+            const titleElement = document.getElementById('drawer-title');
+            const contentElement = document.getElementById('drawer-content');
+
+            if (type === 'docs') {
+                titleElement.textContent = "Framework Documentation";
+                contentElement.innerHTML = `
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Quick start guidelines to configure, custom design, and export clean components.</p>
+                    <div class="space-y-4">
+                        <div class="border border-slate-100 dark:border-slate-800 p-4 rounded-2xl space-y-2 bg-slate-50/50 dark:bg-slate-950/20">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 text-xs font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md">Step 1</span>
+                                <h4 class="font-bold text-slate-800 dark:text-white text-sm">Install Dependencies</h4>
+                            </div>
+                            <pre class="bg-slate-900 dark:bg-black text-blue-300 text-xs p-3.5 rounded-xl font-mono overflow-x-auto">npm i @thephunk/core</pre>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Custom notification toaster helper
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = text;
+            
+            toast.classList.remove('opacity-0', 'translate-y-12');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-12');
+            }, 3000);
+        }
+
+        function copyNotification() {
+            showToast("Deployment initialized! Generating layout build...");
+            setTimeout(() => {
+                showToast("Build successfully deployed live to the phunk collective portal!");
+            }, 1800);
+        }
+    </script>
+</body>
+</html>
