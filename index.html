@@ -1,168 +1,1033 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon | Personal Portfolio</title>
+    <title>The Phunk Collective - Be Awesome</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #030712;
-            overflow: hidden;
-            margin: 0;
-        }
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
-        .glass-card {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .text-white-all {
-            color: #ffffff;
-        }
-        /* Custom focus ring for accessibility */
-        .input-focus:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px #60a5fa;
-        }
-    </style>
-</head>
-<body class="text-white flex flex-col items-center justify-center min-h-screen">
-
-    <canvas id="canvas"></canvas>
-
-    <main class="relative z-10 w-full px-6 text-center">
-        <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter text-white">
-            Coming Soon
-        </h1>
-    </main>
-
-    <footer class="absolute bottom-8 z-10 text-sm md:text-base text-gray-400 font-light tracking-wide">
-        &copy; 2026 Alex Boldy | phunkninja
-    </footer>
-
     <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const notifyForm = document.getElementById('notifyForm');
-        const toast = document.getElementById('toast');
-
-        let particles = [];
-        const particleCount = 100;
-        let mouse = { x: null, y: null, radius: 150 };
-
-        // Handle window resize
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            init();
-        }
-
-        window.addEventListener('resize', resize);
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
-
-        // Particle Class
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = (Math.random() - 0.5) * 0.5;
-                this.opacity = Math.random() * 0.5 + 0.1;
-                this.color = `rgba(96, 165, 250, ${this.opacity})`;
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                // Loop around screen
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-
-                // Mouse interaction
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < mouse.radius) {
-                    const forceDirectionX = dx / distance;
-                    const forceDirectionY = dy / distance;
-                    const force = (mouse.radius - distance) / mouse.radius;
-                    this.x -= forceDirectionX * force * 2;
-                    this.y -= forceDirectionY * force * 2;
-                }
-            }
-
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        // Initialize particles
-        function init() {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        // Connect particles with lines
-        function connect() {
-            for (let a = 0; a < particles.length; a++) {
-                for (let b = a; b < particles.length; b++) {
-                    let dx = particles[a].x - particles[b].x;
-                    let dy = particles[a].y - particles[b].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 150) {
-                        let opacity = 1 - (distance / 150);
-                        ctx.strokeStyle = `rgba(168, 85, 247, ${opacity * 0.2})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[a].x, particles[a].y);
-                        ctx.lineTo(particles[b].x, particles[b].y);
-                        ctx.stroke();
+        // Configure Tailwind to support class-based dark mode
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    boxShadow: {
+                        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
                     }
                 }
             }
         }
-
-        // Animation Loop
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            connect();
-            requestAnimationFrame(animate);
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Smooth, hardware-accelerated transitions for theme switching & view swapping */
+        .theme-transition,
+        .theme-transition *,
+        .theme-transition *:before,
+        .theme-transition *:after {
+            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        fill 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        stroke 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        window.onload = () => {
-            resize();
-            animate();
-        };
+        /* Custom smooth transition for interactive hover elements */
+        .transition-all-custom {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
+        /* Gradient tracking glow behind the card (adapts to light/dark mode) */
+        #interactive-glow {
+            background: radial-gradient(circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--glow-color, rgba(99, 102, 241, 0.15)), transparent 80%);
+            pointer-events: none;
+        }
+
+        /* Slide-up fade transition for tab views */
+        .tab-view {
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .tab-view.hidden-view {
+            opacity: 0;
+            transform: translateY(15px);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+        }
+        .tab-view.active-view {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="theme-transition bg-slate-100 dark:bg-slate-950 min-h-screen w-screen flex items-center justify-center p-4 sm:p-6 md:p-10 relative selection:bg-blue-500 selection:text-white">
+
+    <!-- Ambient Floating Orbs (Moving slightly with mouse coordinates & transitioning on dark theme) -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div id="orb-1" class="absolute w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] rounded-full bg-blue-300/30 dark:bg-blue-900/20 blur-[80px] top-[-10%] left-[-10%] transition-transform duration-1000 ease-out"></div>
+        <div id="orb-2" class="absolute w-[45vw] h-[45vw] max-w-[600px] max-h-[600px] rounded-full bg-indigo-300/20 dark:bg-indigo-950/20 blur-[100px] bottom-[-15%] right-[-5%] transition-transform duration-1000 ease-out"></div>
+        <div id="orb-3" class="absolute w-[30vw] h-[30vw] max-w-[350px] max-h-[350px] rounded-full bg-pink-200/20 dark:bg-rose-950/10 blur-[70px] top-[30%] right-[20%] transition-transform duration-1000 ease-out"></div>
+    </div>
+
+    <!-- Mouse Interactive Radial Glow Overlay -->
+    <div id="interactive-glow" class="absolute inset-0 z-10"></div>
+
+    <!-- Main Card Container -->
+    <main id="main-card" class="relative z-20 w-full max-w-6xl bg-white/90 dark:bg-slate-900/80 backdrop-blur-md rounded-[2.5rem] shadow-2xl shadow-indigo-950/5 dark:shadow-black/50 border border-white/50 dark:border-slate-800/40 p-6 sm:p-10 md:p-16 flex flex-col justify-between min-h-[550px] md:min-h-[620px] transition-all-custom transform hover:shadow-3xl hover:shadow-indigo-950/10 dark:hover:shadow-black/70">
+        
+        <!-- Header -->
+        <header class="flex items-center justify-between w-full mb-10 md:mb-6">
+            <!-- Logo -->
+            <a href="#" onclick="switchTab('home')" class="group flex items-center gap-1.5 focus:outline-none">
+                <span class="text-2xl font-extrabold text-slate-800 dark:text-white tracking-tight transition-colors duration-300 group-hover:text-blue-600 dark:group-hover:text-rose-400">
+                    Phunk<span class="text-blue-600 dark:text-rose-500 transition-all duration-300 group-hover:pl-0.5">.</span>
+                </span>
+            </a>
+
+            <!-- Right-hand Header Actions: Nav + Mode Switcher -->
+            <div class="flex items-center gap-4 sm:gap-6 md:gap-8">
+                <!-- Navigation Links -->
+                <nav class="flex items-center gap-4 sm:gap-6 md:gap-8">
+                    <button id="nav-home" onclick="switchTab('home')" class="nav-link relative text-[15px] font-medium text-blue-600 dark:text-blue-400 py-1 focus:outline-none">
+                        Home
+                        <span class="nav-line absolute bottom-0 left-0 w-full h-[2px] bg-blue-600 dark:bg-blue-400 scale-x-100 transition-transform origin-left duration-300 rounded-full"></span>
+                    </button>
+                    <button id="nav-about" onclick="switchTab('about')" class="nav-link relative text-[15px] font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 py-1 focus:outline-none">
+                        About
+                        <span class="nav-line absolute bottom-0 left-0 w-full h-[2px] bg-blue-600 dark:bg-blue-400 scale-x-0 transition-transform origin-left duration-300 rounded-full"></span>
+                    </button>
+                    <button id="nav-work" onclick="switchTab('work')" class="nav-link relative text-[15px] font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 py-1 focus:outline-none">
+                        Work
+                        <span class="nav-line absolute bottom-0 left-0 w-full h-[2px] bg-blue-600 dark:bg-blue-400 scale-x-0 transition-transform origin-left duration-300 rounded-full"></span>
+                    </button>
+                    <button id="nav-play" onclick="switchTab('play')" class="nav-link relative text-[15px] font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 py-1 focus:outline-none">
+                        Play
+                        <span class="nav-line absolute bottom-0 left-0 w-full h-[2px] bg-blue-600 dark:bg-blue-400 scale-x-0 transition-transform origin-left duration-300 rounded-full"></span>
+                    </button>
+                </nav>
+
+                <!-- Premium Dark Theme Switch Button -->
+                <button id="theme-toggle-btn" onclick="toggleTheme()" class="relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-800 dark:hover:text-white transition-all duration-300 focus:outline-none" aria-label="Toggle Theme">
+                    <!-- Sun Icon (visible in Dark mode) -->
+                    <svg id="theme-icon-sun" class="w-[18px] h-[18px] hidden dark:block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"></path>
+                    </svg>
+                    <!-- Moon Icon (visible in Light mode) -->
+                    <svg id="theme-icon-moon" class="w-[18px] h-[18px] block dark:hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Viewport Container with Dynamic View Switches -->
+        <div class="relative flex-1 flex flex-col justify-center my-auto min-h-[360px]">
+            
+            <!-- 1. HOME TAB VIEW -->
+            <div id="view-home" class="tab-view active-view grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center w-full">
+                <!-- Left Headline & CTA Column -->
+                <div class="lg:col-span-6 flex flex-col justify-center text-left space-y-6 md:space-y-8">
+                    <div class="space-y-4">
+                        <h1 class="text-4xl sm:text-5xl md:text-[54px] font-extrabold text-slate-800 dark:text-white leading-[1.15] tracking-tight">
+                            Welcome to <span class="text-blue-600 dark:text-rose-500 relative inline-block">The Phunk Collective.<span class="absolute bottom-1 left-0 w-full h-[6px] bg-blue-100 dark:bg-rose-950/40 -z-10 rounded"></span></span>
+                            <br class="hidden sm:inline">
+                            Be awesome.
+                        </h1>
+                        <p class="text-base sm:text-lg text-slate-500 dark:text-slate-400 font-normal leading-relaxed max-w-md">
+                            Creating awesome stuff for totally rad people, using a mix of code, vibes and a <strong class="font-extrabold text-slate-800 dark:text-white">caffeine.</strong>
+                        </p>
+                    </div>
+
+                    <!-- CTA Action Buttons -->
+                    <div class="flex flex-wrap items-center gap-4">
+                        <button onclick="switchTab('work')" class="group px-6 py-3.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-500 dark:hover:bg-blue-600 dark:active:bg-blue-700 text-white font-semibold rounded-2xl shadow-lg shadow-blue-600/20 hover:shadow-xl hover:shadow-blue-600/30 transition-all-custom duration-300 flex items-center gap-2 transform hover:-translate-y-0.5">
+                            <span>View Creative Showcase</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                            </svg>
+                        </button>
+                        <button onclick="togglePreviewDrawer('docs')" class="px-6 py-3.5 bg-blue-50/80 dark:bg-slate-800/80 hover:bg-blue-100/90 dark:hover:bg-slate-700/90 active:bg-blue-200 dark:active:bg-slate-600 text-blue-600 dark:text-blue-400 font-semibold rounded-2xl transition-all-custom duration-300 border border-blue-100/50 dark:border-slate-700/50 hover:border-blue-200/60 dark:hover:border-slate-600 transform hover:-translate-y-0.5">
+                            Documentation
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Visual Illustration Column (Reacting to mouse moves) -->
+                <div class="lg:col-span-6 flex items-center justify-center relative min-h-[280px] sm:min-h-[350px]">
+                    <div id="illustration-container" class="relative w-full max-w-[480px] h-[320px] sm:h-[360px] flex items-center justify-center transition-transform duration-300 ease-out select-none">
+                        <!-- Ambient SVG Layers -->
+                        <div data-depth="0.1" class="parallax-layer absolute w-60 h-60 rounded-full bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 shadow-inner flex items-center justify-center -translate-x-20 -translate-y-8">
+                            <div class="w-44 h-44 rounded-full bg-pink-500/10 dark:bg-pink-500/5 mix-blend-multiply dark:mix-blend-normal filter blur-md"></div>
+                        </div>
+                        <div data-depth="0.15" class="parallax-layer absolute w-56 h-56 rounded-full bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 shadow-inner translate-x-20 translate-y-12">
+                            <div class="w-40 h-40 rounded-full bg-blue-500/10 dark:bg-blue-500/5 mix-blend-multiply dark:mix-blend-normal filter blur-md"></div>
+                        </div>
+                        <div data-depth="0.25" class="parallax-layer absolute w-16 h-16 rounded-full bg-rose-400 dark:bg-rose-500/90 -translate-x-32 -translate-y-20 shadow-md"></div>
+
+                        <!-- Main Custom SVG Illustration -->
+                        <svg id="custom-illustration" class="w-full h-full relative z-10" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- SVG Interface elements -->
+                            <g data-depth="0.3" class="parallax-layer">
+                                <rect x="60" y="190" width="130" height="90" rx="8" fill="#2d3748" class="shadow-lg" />
+                                <rect x="70" y="202" width="110" height="6" rx="3" fill="#4a5568" />
+                                <circle cx="75" cy="222" r="5" fill="#3182ce" />
+                                <rect x="88" y="219" width="80" height="6" rx="3" fill="#4a5568" />
+                                <circle cx="75" cy="238" r="5" fill="#3182ce" />
+                                <rect x="88" y="235" width="60" height="6" rx="3" fill="#4a5568" />
+                                <circle cx="75" cy="254" r="5" fill="#3182ce" />
+                                <rect x="88" y="251" width="90" height="6" rx="3" fill="#4a5568" />
+                                <ellipse cx="125" cy="290" rx="35" ry="5" fill="#e2e8f0" class="dark:fill-slate-800" />
+                            </g>
+
+                            <!-- Left Figure (Woman developer in Light mode, Ninja in Dark Mode) -->
+                            <g data-depth="0.4" class="parallax-layer">
+                                <!-- Shadow -->
+                                <ellipse cx="190" cy="305" rx="30" ry="6" fill="#cbd5e1" class="dark:fill-slate-950" opacity="0.6"/>
+                                <!-- Legs -->
+                                <path d="M185 240 L188 305" stroke="#1e293b" class="dark:stroke-slate-950" stroke-width="6" stroke-linecap="round"/>
+                                <path d="M195 240 L198 305" stroke="#1e293b" class="dark:stroke-slate-950" stroke-width="6" stroke-linecap="round"/>
+                                <!-- Leg strapping details for Ninja mode only -->
+                                <path d="M185 270 L191 270" stroke="#ffffff" stroke-width="1.5" class="hidden dark:block opacity-45" />
+                                <path d="M186 280 L192 280" stroke="#ffffff" stroke-width="1.5" class="hidden dark:block opacity-45" />
+                                <path d="M195 270 L201 270" stroke="#ffffff" stroke-width="1.5" class="hidden dark:block opacity-45" />
+                                <path d="M196 280 L202 280" stroke="#ffffff" stroke-width="1.5" class="hidden dark:block opacity-45" />
+
+                                <!-- Pants -->
+                                <path d="M180 190 L200 190 L205 245 L182 245 Z" fill="#1e293b" class="dark:fill-slate-950" />
+                                <!-- Torso / Shirt -->
+                                <path d="M172 135 L208 135 L202 190 L178 190 Z" fill="#4f46e5" class="dark:fill-slate-900" />
+                                <!-- Red Sash (Dark Mode Ninja exclusive) -->
+                                <path d="M178 180 L202 180" stroke="#ef4444" stroke-width="5" class="hidden dark:block" />
+                                <path d="M202 180 L208 195" stroke="#ef4444" stroke-width="3" stroke-linecap="round" class="hidden dark:block" />
+
+                                <!-- Neck -->
+                                <rect x="187" y="125" width="6" height="12" fill="#8d5b4c" class="dark:fill-slate-900" />
+                                <!-- Head & Face Base -->
+                                <circle cx="190" cy="115" r="14" fill="#8d5b4c" class="dark:fill-slate-900" />
+                                <!-- Eye Slit (Dark Mode exclusive) -->
+                                <rect x="182" y="108" width="16" height="6" fill="#8d5b4c" class="hidden dark:block" />
+                                <!-- Ninja Eyes (Dark Mode exclusive) -->
+                                <circle cx="186" cy="111" r="1" fill="#111827" class="hidden dark:block" />
+                                <circle cx="194" cy="111" r="1" fill="#111827" class="hidden dark:block" />
+
+                                <!-- Hair / Stealth Cowl -->
+                                <circle cx="192" cy="95" r="8" fill="#1e293b" class="dark:fill-slate-950" />
+                                <path d="M176 110 C176 95, 204 95, 204 110 Z" fill="#1e293b" class="dark:fill-slate-950" />
+                                
+                                <!-- Ninja Headband Red (Dark Mode exclusive) -->
+                                <path d="M178 106 L202 106" stroke="#ef4444" stroke-width="3.5" class="hidden dark:block" />
+                                <path d="M176 106 Q168 102 165 108" stroke="#ef4444" stroke-width="2.5" fill="none" class="hidden dark:block" />
+                                <path d="M176 106 Q170 114 167 116" stroke="#ef4444" stroke-width="2" fill="none" class="hidden dark:block" />
+
+                                <!-- Arms -->
+                                <path d="M174 135 L145 190" stroke="#4f46e5" class="dark:stroke-slate-900" stroke-width="10" stroke-linecap="round"/>
+                                <path d="M145 190 L140 193" stroke="#8d5b4c" class="dark:stroke-slate-900" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M205 135 L212 185" stroke="#4f46e5" class="dark:stroke-slate-900" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M212 185 L213 192" stroke="#8d5b4c" class="dark:stroke-slate-900" stroke-width="7" stroke-linecap="round"/>
+                            </g>
+
+                            <!-- Right Scene Card (Tech Board) -->
+                            <g data-depth="0.35" class="parallax-layer">
+                                <rect x="290" y="220" width="110" height="75" rx="8" fill="#1e293b" class="shadow-lg dark:fill-slate-800" />
+                                <circle cx="325" cy="258" r="18" fill="#2563eb" />
+                                <path d="M325 240 A 18 18 0 0 1 343 258 L 325 258 Z" fill="#60a5fa" />
+                                <rect x="355" y="235" width="35" height="6" rx="3" fill="#475569" class="dark:fill-slate-600" />
+                                <rect x="355" y="247" width="25" height="6" rx="3" fill="#475569" class="dark:fill-slate-600" />
+                                <rect x="355" y="259" width="30" height="6" rx="3" fill="#475569" class="dark:fill-slate-600" />
+                                <rect x="355" y="271" width="15" height="6" rx="3" fill="#475569" class="dark:fill-slate-600" />
+                            </g>
+
+                            <!-- Right Figure (Man developer in Light mode, Ninja with Katana in Dark Mode) -->
+                            <g data-depth="0.45" class="parallax-layer">
+                                <!-- Shadow -->
+                                <ellipse cx="360" cy="318" rx="25" ry="5" fill="#cbd5e1" class="dark:fill-slate-950" opacity="0.6" />
+                                
+                                <!-- Ninja Katana on Back (Dark Mode exclusive) -->
+                                <!-- Sheath -->
+                                <path d="M352 215 L325 155" stroke="#0f172a" stroke-width="6" stroke-linecap="round" class="hidden dark:block" />
+                                <!-- Hilt -->
+                                <path d="M325 155 L315 133" stroke="#ef4444" stroke-width="6" stroke-linecap="round" class="hidden dark:block" />
+                                <!-- Guard -->
+                                <path d="M320 158 L330 152" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round" class="hidden dark:block" />
+
+                                <!-- Leg hanging down -->
+                                <path d="M380 260 L395 315" stroke="#f43f5e" class="dark:stroke-slate-950" stroke-width="7" stroke-linecap="round"/>
+                                <!-- Leg crossed/resting -->
+                                <path d="M384 255 L405 275 L415 295" stroke="#f43f5e" class="dark:stroke-slate-950" stroke-width="7" stroke-linecap="round"/>
+                                
+                                <!-- Skin shoes/ankles -->
+                                <path d="M395 315 L402 318" stroke="#cca080" class="dark:stroke-slate-950" stroke-width="6" stroke-linecap="round"/>
+                                
+                                <!-- Torso / Shirt -->
+                                <path d="M365 185 L392 180 L385 240 L362 240 Z" fill="#2563eb" class="dark:fill-slate-900" />
+                                <!-- Red Ninja Belt/Sash (Dark Mode exclusive) -->
+                                <path d="M363 234 L386 230" stroke="#ef4444" stroke-width="5" class="hidden dark:block" />
+
+                                <!-- Neck -->
+                                <rect x="373" y="174" width="6" height="10" fill="#cca080" class="dark:fill-slate-900" />
+                                
+                                <!-- Head & Face Base -->
+                                <circle cx="376" cy="160" r="13" fill="#cca080" class="dark:fill-slate-900" />
+                                <!-- Eye Slit (Dark Mode exclusive) -->
+                                <rect x="368" y="153" width="16" height="6" fill="#cca080" class="hidden dark:block" />
+                                <!-- Ninja Eyes (Dark Mode exclusive) -->
+                                <circle cx="372" cy="156" r="1" fill="#111827" class="hidden dark:block" />
+                                <circle cx="380" cy="156" r="1" fill="#111827" class="hidden dark:block" />
+
+                                <!-- Hair / Stealth Cowl -->
+                                <path d="M367 155 C367 145, 388 145, 388 155 Z" fill="#1e293b" class="dark:fill-slate-950" />
+                                
+                                <!-- Ninja Headband Red (Dark Mode exclusive) -->
+                                <path d="M367 151 L387 151" stroke="#ef4444" stroke-width="3.5" class="hidden dark:block" />
+                                <path d="M387 151 Q395 147 398 153" stroke="#ef4444" stroke-width="2.5" fill="none" class="hidden dark:block" />
+                                <path d="M387 151 Q393 159 395 161" stroke="#ef4444" stroke-width="2" fill="none" class="hidden dark:block" />
+
+                                <!-- Arms -->
+                                <path d="M366 185 L352 230" stroke="#2563eb" class="dark:stroke-slate-900" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M390 182 L402 235" stroke="#2563eb" class="dark:stroke-slate-900" stroke-width="8" stroke-linecap="round"/>
+                            </g>
+
+                            <!-- Modern Accent Floaters (Matching Blue/Pink droplets in Light mode, Shurikens in Dark Mode) -->
+                            <g data-depth="0.5" class="parallax-layer">
+                                <!-- Left Floater -->
+                                <!-- Light Mode: Blue Droplet -->
+                                <path d="M125 245 C125 245, 110 260, 125 275 C140 260, 125 245, 125 245 Z" fill="#2563eb" class="drop-shadow-md dark:hidden"/>
+                                <!-- Dark Mode: Ninja Shuriken / Throwing Star -->
+                                <g class="hidden dark:block drop-shadow-[0_4px_6px_rgba(244,63,94,0.3)] animate-[spin_12s_linear_infinite]" transform="translate(125, 260)">
+                                    <path d="M 0,-15 L 3,-3 L 15,0 L 3,3 L 0,15 L -3,3 L -15,0 L -3,-3 Z" fill="#94a3b8" />
+                                    <path d="M 0,-15 L 0,0 L 15,0 Z" fill="#cbd5e1" />
+                                    <path d="M 0,15 L 0,0 L -15,0 Z" fill="#cbd5e1" />
+                                    <circle cx="0" cy="0" r="3" fill="#1e293b" />
+                                </g>
+
+                                <!-- Right Floater -->
+                                <!-- Light Mode: Blue Droplet -->
+                                <path d="M390 290 C390 290, 375 305, 390 320 C405 305, 390 290, 390 290 Z" fill="#2563eb" class="drop-shadow-md dark:hidden"/>
+                                <!-- Dark Mode: Ninja Shuriken / Throwing Star -->
+                                <g class="hidden dark:block drop-shadow-[0_4px_6px_rgba(59,130,246,0.3)] animate-[spin_10s_linear_infinite]" transform="translate(390, 305)">
+                                    <path d="M 0,-15 L 3,-3 L 15,0 L 3,3 L 0,15 L -3,3 L -15,0 L -3,-3 Z" fill="#94a3b8" />
+                                    <path d="M 0,-15 L 0,0 L 15,0 Z" fill="#cbd5e1" />
+                                    <path d="M 0,15 L 0,0 L -15,0 Z" fill="#cbd5e1" />
+                                    <circle cx="0" cy="0" r="3" fill="#1e293b" />
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. ABOUT TAB VIEW -->
+            <div id="view-about" class="tab-view hidden-view w-full">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+                    <!-- Left Copy -->
+                    <div class="md:col-span-5 space-y-6">
+                        <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400 rounded-full border border-blue-100 dark:border-blue-900/40 inline-block">Who We Are</span>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 dark:text-white leading-tight">We craft rhythms in modern design.</h2>
+                        <p class="text-slate-500 dark:text-slate-400 leading-relaxed text-[15px]">
+                            The Phunk Collective is a dynamic assembly of designers, builders, and creative minds. We believe code and artwork should bounce off the canvas with confidence, bringing energy and soul to modern web environments.
+                        </p>
+                        <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg">99%</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 dark:text-white text-sm">Pure Vibrancy</h4>
+                                <p class="text-xs text-slate-400 dark:text-slate-500">Every design engineered for high interactive impact.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Grid Cards -->
+                    <div class="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Clickable "This is how I do" Card (Formerly Radical Play) -->
+                        <div onclick="openQaModal()" class="border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex flex-col justify-between hover:scale-[1.02] hover:border-blue-500 dark:hover:border-rose-400 transition-all duration-300 cursor-pointer group">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-rose-950/40 text-blue-600 dark:text-rose-400 flex items-center justify-center font-bold mb-4 group-hover:bg-blue-100 dark:group-hover:bg-rose-900/60 transition-colors">01</div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-rose-400 transition-colors">This is how I do</h3>
+                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">Quality assurance in gaming systems, bug hunting, and regression testing. Click to view detailed focus.</p>
+                            </div>
+                        </div>
+                        <div class="border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex flex-col justify-between hover:scale-[1.02] hover:border-pink-500 dark:hover:border-pink-400 transition-all duration-300">
+                            <div class="w-10 h-10 rounded-xl bg-pink-50 dark:bg-pink-900/20 text-pink-600 dark:text-pink-400 flex items-center justify-center font-bold mb-4">02</div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-base">Pixel Flow</h3>
+                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">Clean alignment, robust CSS architecture, and highly responsive rendering.</p>
+                            </div>
+                        </div>
+                        <div class="border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-md flex flex-col justify-between hover:scale-[1.02] hover:border-amber-500 dark:hover:border-amber-400 transition-all duration-300 sm:col-span-2">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">03</div>
+                                <h3 class="font-bold text-slate-800 dark:text-white text-base">Our Ultimate Goal</h3>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-3">Empowering developers to shed safe, boring constraints and build platforms featuring expressive digital energy.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. WORK TAB VIEW -->
+            <div id="view-work" class="tab-view hidden-view w-full space-y-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400 rounded-full border border-blue-100 dark:border-blue-900/40 inline-block">Creative Grooves</span>
+                        <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mt-2">Latest Productions</h2>
+                    </div>
+                    <!-- Categories Filter -->
+                    <div class="flex flex-wrap gap-2 bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl border border-slate-200/50 dark:border-slate-800/40 self-start">
+                        <button onclick="filterWork('all')" id="filter-all" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition-all duration-200">All</button>
+                        <button onclick="filterWork('web')" id="filter-web" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all duration-200">Web UI</button>
+                        <button onclick="filterWork('motion')" id="filter-motion" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all duration-200">Interactive</button>
+                        <button onclick="filterWork('brand')" id="filter-brand" class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all duration-200">Identity</button>
+                    </div>
+                </div>
+
+                <!-- Projects Showcase Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="work-grid">
+                    <!-- Project 1 (Web) -->
+                    <div class="project-card border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2.5xl p-4 shadow-sm hover:shadow-xl hover:shadow-indigo-950/5 hover:-translate-y-1 transition-all duration-300" data-cat="web">
+                        <div class="h-40 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-xl relative overflow-hidden flex items-center justify-center">
+                            <!-- Visual Graphic -->
+                            <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+                            <span class="text-white text-sm font-extrabold">PHUNK PORTAL v1.0</span>
+                        </div>
+                        <div class="pt-4 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-extrabold text-slate-800 dark:text-white text-base">Interactive Web Terminal</h4>
+                                <span class="text-xs text-blue-500 dark:text-blue-400 font-bold">Web Development</span>
+                            </div>
+                            <button onclick="openProjectModal('Portal Frame', 'A beautiful experimental full screen application supporting custom audio synthetics and canvas visualization shaders.')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 (Motion) -->
+                    <div class="project-card border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2.5xl p-4 shadow-sm hover:shadow-xl hover:shadow-indigo-950/5 hover:-translate-y-1 transition-all duration-300" data-cat="motion">
+                        <div class="h-40 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl relative overflow-hidden flex items-center justify-center">
+                            <div class="absolute w-20 h-20 rounded-full border border-white/20 animate-ping"></div>
+                            <span class="text-white text-sm font-extrabold">WAVE SYNTHESIS</span>
+                        </div>
+                        <div class="pt-4 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-extrabold text-slate-800 dark:text-white text-base">Fluid Audio Waveforms</h4>
+                                <span class="text-xs text-pink-500 dark:text-pink-400 font-bold">Interactive Art</span>
+                            </div>
+                            <button onclick="openProjectModal('Audio Canvas Waveforms', 'A creative sandbox utilizing real-time WebGL and HTML Canvas engines mirroring audio nodes in organic waves.')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 (Brand) -->
+                    <div class="project-card border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2.5xl p-4 shadow-sm hover:shadow-xl hover:shadow-indigo-950/5 hover:-translate-y-1 transition-all duration-300" data-cat="brand">
+                        <div class="h-40 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl relative overflow-hidden flex items-center justify-center">
+                            <div class="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,#333_25%,transparent_25%,transparent_75%,#333_75%,#333),linear-gradient(45deg,#333_25%,white_25%,white_75%,#333_75%,#333)] [background-size:20px_20px]"></div>
+                            <span class="text-white text-sm font-extrabold">PHUNKY BRAND KIT</span>
+                        </div>
+                        <div class="pt-4 flex justify-between items-center">
+                            <div>
+                                <h4 class="font-extrabold text-slate-800 dark:text-white text-base">Dynamic Typographic Brand</h4>
+                                <span class="text-xs text-amber-500 dark:text-amber-400 font-bold">Branding</span>
+                            </div>
+                            <button onclick="openProjectModal('Retro-Modern Brand', 'Typographic design files, custom SVG vector badges, and responsive animation setups.')" class="p-2.5 rounded-xl bg-slate-100 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. PLAY TAB VIEW -->
+            <div id="view-play" class="tab-view hidden-view w-full space-y-6">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div>
+                        <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-400 rounded-full border border-blue-100 dark:border-blue-900/40 inline-block">The Sandbox Playground</span>
+                        <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mt-2">Phunk Audio-Visual Sandbox</h2>
+                        <p class="text-slate-400 text-xs sm:text-sm mt-1">Move your cursor, or click to synthesize sound waves and dynamic liquid particles!</p>
+                    </div>
+                    <!-- Audio Mute/Unmute Switcher -->
+                    <button id="synth-audio-toggle" onclick="toggleAudioSynthesis()" class="flex items-center gap-2 px-4 py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 rounded-xl font-bold text-xs border border-rose-100 dark:border-rose-900/30 transition-all duration-300">
+                        <span id="synth-audio-dot" class="w-2.5 h-2.5 rounded-full bg-rose-600 dark:bg-rose-400 animate-pulse"></span>
+                        <span id="synth-audio-text">Audio: Disabled</span>
+                    </button>
+                </div>
+
+                <!-- Canvas sandbox -->
+                <div class="relative w-full overflow-hidden rounded-[1.5rem] bg-slate-900 border border-slate-800/80 shadow-2xl h-[280px] sm:h-[320px]">
+                    <canvas id="play-canvas" class="absolute inset-0 w-full h-full cursor-crosshair"></canvas>
+                    
+                    <!-- Floating instructions overlay -->
+                    <div class="absolute bottom-4 left-4 z-10 bg-slate-950/80 backdrop-blur-md px-4 py-2 rounded-xl text-[11px] text-slate-400 pointer-events-none flex items-center gap-2 border border-slate-800">
+                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                        Drag mouse on sandbox grid to stir the particle flow
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Interactive Footer / Action Bar -->
+        <footer class="mt-8 md:mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800/60 pt-6">
+            <div class="flex items-center gap-2">
+                <span id="pulse-indicator" class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span id="status-text" class="text-xs sm:text-sm text-slate-400 dark:text-slate-500 font-medium">Fully Interactive Community Framework</span>
+            </div>
+            <div class="text-xs sm:text-sm text-slate-400 dark:text-slate-500">
+                &copy; <span id="year">2026</span> The Phunk Collective. All rights reserved.
+            </div>
+        </footer>
+    </main>
+
+    <!-- Dedicated QA Modal Popup ("This is how I do") -->
+    <div id="qa-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" onclick="closeQaModal()"></div>
+        <!-- Dialog -->
+        <div class="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[2rem] p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800/80 animate-in fade-in zoom-in-95 duration-200">
+            <!-- Close Button "x" in top right -->
+            <button onclick="closeQaModal()" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none" aria-label="Close modal">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <!-- Modal Body content -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-sm">QA</span>
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-800 dark:text-white">This is how I do</h3>
+                </div>
+                <div class="h-px bg-slate-100 dark:bg-slate-800/80 my-3"></div>
+                <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    I work in quality assurance for 7 Days to Die, where I help improve the overall player experience by testing gameplay systems, finding bugs, and making sure new updates run smoothly. My day-to-day work includes testing mechanics like combat, crafting, zombie AI, world generation, and multiplayer features across different builds. I regularly reproduce and document issues, perform regression testing after patches, and work closely with the team to help identify problems before they reach players. Being part of the QA process has strengthened my attention to detail, communication skills, and ability to think critically about gameplay and user experience.
+                </p>
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeQaModal()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 dark:bg-rose-600 dark:hover:bg-rose-700 text-white font-bold rounded-xl transition-colors text-sm shadow-md">
+                    Perfect
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project dynamic description modal popup -->
+    <div id="project-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm" onclick="closeProjectModal()"></div>
+        <!-- Dialog -->
+        <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200">
+            <h3 id="modal-project-title" class="text-xl font-extrabold text-slate-800 dark:text-white">Project Case</h3>
+            <p id="modal-project-desc" class="text-sm text-slate-500 dark:text-slate-400 mt-3 leading-relaxed">Details of the creative setup.</p>
+            <div class="mt-6 flex items-center gap-3">
+                <button onclick="closeProjectModal()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors">Perfect</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Component Preview Drawer (Styled for light & dark mode) -->
+    <div id="preview-drawer" class="fixed inset-y-0 right-0 w-full max-w-lg bg-white dark:bg-slate-900 shadow-2xl border-l border-slate-100 dark:border-slate-800/80 z-50 transform translate-x-full transition-transform duration-500 ease-in-out flex flex-col">
+        <!-- Drawer Header -->
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
+            <h2 id="drawer-title" class="text-xl font-bold text-slate-800 dark:text-white">Available Templates</h2>
+            <button onclick="togglePreviewDrawer()" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Drawer Content Area (Dynamically Rendered based on interaction) -->
+        <div class="p-6 flex-1 overflow-y-auto space-y-6" id="drawer-content">
+            <!-- Dynamic components inserted here -->
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="p-6 border-t border-slate-100 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-950/30 flex items-center gap-3">
+            <button onclick="copyNotification()" class="flex-1 py-3 bg-slate-800 dark:bg-slate-100 hover:bg-slate-900 dark:hover:bg-white text-white dark:text-slate-900 rounded-xl font-semibold transition-all duration-300">
+                Deploy Instantly
+            </button>
+            <button onclick="togglePreviewDrawer()" class="px-5 py-3 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-semibold transition-all duration-300">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Transparent Drawer Overlay Backdrop -->
+    <div id="drawer-overlay" class="fixed inset-0 bg-slate-900/20 dark:bg-black/40 backdrop-blur-sm z-40 hidden opacity-0 transition-opacity duration-500" onclick="togglePreviewDrawer()"></div>
+
+    <!-- Customized Elegant Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-12 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span id="toast-text" class="text-[14px] font-medium">Draft action succeeded!</span>
+    </div>
+
+    <!-- Page interactivity, Theme Switching, Tabs and Play Sandbox Sandbox scripts -->
+    <script>
+        // Automatic Year update
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Tracker values for parallax/interactivity
+        const mainCard = document.getElementById('main-card');
+        const glow = document.getElementById('interactive-glow');
+        const layers = document.querySelectorAll('.parallax-layer');
+        const orb1 = document.getElementById('orb-1');
+        const orb2 = document.getElementById('orb-2');
+        const orb3 = document.getElementById('orb-3');
+
+        // Check stored theme preference on load (Defaults to Light Mode if none is manually saved)
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            updateGlowColor(true);
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            updateGlowColor(false);
+        }
+
+        // Active Theme Toggler
+        function toggleTheme() {
+            document.body.classList.add('theme-transition');
+            const isDarkNow = document.documentElement.classList.contains('dark');
+            if (isDarkNow) {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                updateGlowColor(false);
+                showToast("Switched to Light Mode (Tech Professionals)");
+            } else {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+                localStorage.setItem('theme', 'dark');
+                updateGlowColor(true);
+                showToast("Switched to Dark Mode (Stealth Ninjas!)");
+            }
+        }
+
+        // Update radial gradient color dynamically based on theme
+        function updateGlowColor(isDark) {
+            if (isDark) {
+                glow.style.setProperty('--glow-color', 'rgba(129, 140, 248, 0.12)');
+            } else {
+                glow.style.setProperty('--glow-color', 'rgba(99, 102, 241, 0.15)');
+            }
+        }
+
+        // Tab views swap navigation logic
+        function switchTab(tabId) {
+            // Remove active style from all nav buttons and hide all views
+            const tabs = ['home', 'about', 'work', 'play'];
+            
+            tabs.forEach(item => {
+                const navBtn = document.getElementById(`nav-${item}`);
+                const view = document.getElementById(`view-${item}`);
+                
+                if (item === tabId) {
+                    navBtn.className = "nav-link relative text-[15px] font-bold text-blue-600 dark:text-blue-400 py-1 focus:outline-none";
+                    navBtn.querySelector('.nav-line').classList.remove('scale-x-0');
+                    navBtn.querySelector('.nav-line').classList.add('scale-x-100');
+                    
+                    view.classList.remove('hidden-view', 'hidden');
+                    view.classList.add('active-view');
+                } else {
+                    navBtn.className = "nav-link relative text-[15px] font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 py-1 focus:outline-none";
+                    navBtn.querySelector('.nav-line').classList.add('scale-x-0');
+                    navBtn.querySelector('.nav-line').classList.remove('scale-x-100');
+                    
+                    view.classList.add('hidden-view', 'hidden');
+                    view.classList.remove('active-view');
+                }
+            });
+
+            // Specific initialization triggers per view
+            if (tabId === 'play') {
+                initPlayCanvas();
+            } else {
+                stopPlayCanvas();
+            }
+
+            // Update footer status message
+            const statusText = document.getElementById('status-text');
+            const pulse = document.getElementById('pulse-indicator');
+            if (tabId === 'home') {
+                statusText.textContent = "Fully Interactive Community Framework";
+                pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+            } else if (tabId === 'about') {
+                statusText.textContent = "Exploring The Phunk Philosophy";
+                pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse";
+            } else if (tabId === 'work') {
+                statusText.textContent = "Browsing Creative Productions";
+                pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse";
+            } else if (tabId === 'play') {
+                statusText.textContent = "Audiovisual Physics Playground Active";
+                pulse.className = "inline-block w-2.5 h-2.5 rounded-full bg-pink-500 animate-pulse";
+            }
+
+            showToast(`Swapped to: ${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
+        }
+
+        // Work Grid filtering logic
+        function filterWork(category) {
+            const cards = document.querySelectorAll('.project-card');
+            const btns = document.querySelectorAll('.filter-btn');
+
+            // Style active filter button
+            btns.forEach(btn => {
+                if (btn.id === `filter-${category}`) {
+                    btn.className = "filter-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm transition-all duration-200";
+                } else {
+                    btn.className = "filter-btn px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all duration-200";
+                }
+            });
+
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-cat') === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Project details case-study pop-up modal
+        function openProjectModal(title, description) {
+            document.getElementById('modal-project-title').textContent = title;
+            document.getElementById('modal-project-desc').textContent = description;
+            const modal = document.getElementById('project-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeProjectModal() {
+            const modal = document.getElementById('project-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        /* --- Dedicated QA Modal Actions --- */
+        function openQaModal() {
+            const modal = document.getElementById('qa-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            showToast("Opening QA Profile Details");
+        }
+
+        function closeQaModal() {
+            const modal = document.getElementById('qa-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        /* --- THE PHUNKY SANDBOX INTERACTIVE GRAPHICS & AUDIO AUDIO-SYNTH --- */
+        let canvas = document.getElementById('play-canvas');
+        let ctx = canvas.getContext('2d');
+        let animationFrameId = null;
+        let particles = [];
+        let mouseX = 0;
+        let mouseY = 0;
+        let isStirring = false;
+        
+        // Web Audio Synthesizer Config
+        let audioCtx = null;
+        let synthesisEnabled = false;
+
+        function toggleAudioSynthesis() {
+            synthesisEnabled = !synthesisEnabled;
+            const btnDot = document.getElementById('synth-audio-dot');
+            const btnTxt = document.getElementById('synth-audio-text');
+            const btn = document.getElementById('synth-audio-toggle');
+            
+            if (synthesisEnabled) {
+                // Initialize context on user event
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                btnDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                btnTxt.textContent = "Audio: Enabled";
+                btn.className = "flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 rounded-xl font-bold text-xs border border-emerald-100 dark:border-emerald-900/30 transition-all duration-300";
+                showToast("Audio synthesizer enabled! Move cursor over sandbox.");
+            } else {
+                btnDot.className = "w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse";
+                btnTxt.textContent = "Audio: Disabled";
+                btn.className = "flex items-center gap-2 px-4 py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 rounded-xl font-bold text-xs border border-rose-100 dark:border-rose-900/30 transition-all duration-300";
+                showToast("Audio synthesizer muted.");
+            }
+        }
+
+        function playSynthTone(frequency) {
+            if (!synthesisEnabled || !audioCtx) return;
+            try {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                
+                osc.type = 'triangle'; // Smooth mellow vintage synth tone
+                osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+                
+                // Extremely rapid gain decay to make it responsive / bubbly
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch (e) {
+                // Fail-safe silently if audio context is blocked
+            }
+        }
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = Math.random() * 4 + 2;
+                this.color = `hsl(${Math.random() * 60 + 200}, 85%, 60%)`; // Premium phunky blues & purples
+                if (Math.random() > 0.6) {
+                    this.color = `hsl(${Math.random() * 30 + 330}, 95%, 65%)`; // Pink neon pops
+                }
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = (Math.random() - 0.5) * 4;
+                this.life = 100; // Lifespan in frames
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life / 100;
+                ctx.fill();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vx *= 0.98; // Friction deceleration
+                this.vy *= 0.98;
+                this.life -= 1.5;
+            }
+        }
+
+        function initPlayCanvas() {
+            // Match canvas coordinates to device boundaries on load & resize
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            canvas.addEventListener('mousemove', onCanvasMove);
+            canvas.addEventListener('touchmove', onCanvasTouch, { passive: true });
+            canvas.addEventListener('mousedown', () => { isStirring = true; });
+            canvas.addEventListener('mouseup', () => { isStirring = false; });
+
+            // Initialize random floating particles to populate the board
+            particles = [];
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
+            }
+
+            // Fire loop
+            animatePlay();
+        }
+
+        function stopPlayCanvas() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            window.removeEventListener('resize', resizeCanvas);
+        }
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            const rect = canvas.parentNode.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        function onCanvasMove(e) {
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+            spawnInteractParticles();
+        }
+
+        function onCanvasTouch(e) {
+            if (e.touches.length > 0) {
+                const rect = canvas.getBoundingClientRect();
+                mouseX = e.touches[0].clientX - rect.left;
+                mouseY = e.touches[0].top - rect.top;
+                spawnInteractParticles();
+            }
+        }
+
+        // Spawn interactive fluid particles inside play sandbox
+        function spawnInteractParticles() {
+            for (let i = 0; i < 2; i++) {
+                let p = new Particle(mouseX, mouseY);
+                p.vx += (Math.random() - 0.5) * 6;
+                p.vy += (Math.random() - 0.5) * 6;
+                particles.push(p);
+            }
+
+            if (Math.random() > 0.85) {
+                const ratio = 1 - (mouseY / canvas.height);
+                const pitch = 220 + (ratio * 440);
+                playSynthTone(pitch);
+            }
+        }
+
+        function animatePlay() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = 'rgba(99, 102, 241, 0.04)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dist = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
+                    if (dist < 80) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            if (particles.length < 35) {
+                particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
+            }
+
+            animationFrameId = requestAnimationFrame(animatePlay);
+        }
+
+        // Smoothly follow Mouse Movement across the entire Screen
+        window.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+
+            const xPct = (clientX / w) * 100;
+            const yPct = (clientY / h) * 100;
+
+            glow.style.setProperty('--mouse-x', `${xPct}%`);
+            glow.style.setProperty('--mouse-y', `${yPct}%`);
+
+            const driftX = (clientX - w / 2) * 0.05;
+            const driftY = (clientY - h / 2) * 0.05;
+            orb1.style.transform = `translate(${driftX}px, ${driftY}px)`;
+            orb2.style.transform = `translate(${-driftX * 0.7}px, ${-driftY * 0.7}px)`;
+            orb3.style.transform = `translate(${driftX * 1.2}px, ${-driftY * 0.5}px)`;
+
+            const cardRect = mainCard.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            const mouseFromCardX = clientX - cardCenterX;
+            const mouseFromCardY = clientY - cardCenterY;
+
+            const tiltX = (mouseFromCardY / (window.innerHeight / 2)) * -2.5;
+            const tiltY = (mouseFromCardX / (window.innerWidth / 2)) * 2.5;
+
+            mainCard.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+
+            const homeView = document.getElementById('view-home');
+            if (homeView && !homeView.classList.contains('hidden-view')) {
+                layers.forEach(layer => {
+                    const depth = parseFloat(layer.getAttribute('data-depth') || 0.2);
+                    const xOffset = mouseFromCardX * depth * 0.15;
+                    const yOffset = mouseFromCardY * depth * 0.15;
+                    layer.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+                });
+            }
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mainCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            layers.forEach(layer => {
+                layer.style.transform = `translate(0px, 0px)`;
+            });
+            orb1.style.transform = 'translate(0px, 0px)';
+            orb2.style.transform = 'translate(0px, 0px)';
+            orb3.style.transform = 'translate(0px, 0px)';
+        });
+
+        function togglePreviewDrawer(type = '') {
+            const drawer = document.getElementById('preview-drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            const isOpen = !drawer.classList.contains('translate-x-full');
+
+            if (isOpen || !type) {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('opacity-100');
+            } else {
+                renderDrawerContent(type);
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.classList.add('opacity-100');
+                }, 50);
+            }
+        }
+
+        function renderDrawerContent(type) {
+            const titleElement = document.getElementById('drawer-title');
+            const contentElement = document.getElementById('drawer-content');
+
+            if (type === 'docs') {
+                titleElement.textContent = "Framework Documentation";
+                contentElement.innerHTML = `
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Quick start guidelines to configure, custom design, and export clean components.</p>
+                    <div class="space-y-4">
+                        <div class="border border-slate-100 dark:border-slate-800 p-4 rounded-2xl space-y-2 bg-slate-50/50 dark:bg-slate-950/20">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 text-xs font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md">Step 1</span>
+                                <h4 class="font-bold text-slate-800 dark:text-white text-sm">Install Dependencies</h4>
+                            </div>
+                            <pre class="bg-slate-900 dark:bg-black text-blue-300 text-xs p-3.5 rounded-xl font-mono overflow-x-auto">npm i @thephunk/core</pre>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Custom notification toaster helper
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = text;
+            
+            toast.classList.remove('opacity-0', 'translate-y-12');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-12');
+            }, 3000);
+        }
+
+        function copyNotification() {
+            showToast("Deployment initialized! Generating layout build...");
+            setTimeout(() => {
+                showToast("Build successfully deployed live to the phunk collective portal!");
+            }, 1800);
+        }
     </script>
 </body>
 </html>
